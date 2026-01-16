@@ -34,8 +34,7 @@ function CloudFortress() {
             <Cloud
                 opacity={0.8}
                 speed={0.4}
-                width={10}
-                depth={1.5}
+                bounds={[10, 2, 1.5]}
                 segments={20}
                 position={[0, 0, 0]}
                 color="#ffffff"
