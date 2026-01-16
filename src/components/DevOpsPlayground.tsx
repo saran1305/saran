@@ -205,8 +205,8 @@ export default function DevOpsPlayground() {
                                         playClickSound();
                                     }}
                                     className={`relative group cursor-pointer p-4 rounded-xl border transition-all duration-300 overflow-hidden ${isActive
-                                        ? 'bg-white/5 border-white/20'
-                                        : 'bg-transparent border-transparent hover:bg-white/5'
+                                        ? 'bg-accent-blue/5 border-accent-blue/20'
+                                        : 'bg-transparent border-transparent hover:bg-accent-blue/5'
                                         }`}
                                 >
                                     {/* Active Highlight Line */}
@@ -221,22 +221,22 @@ export default function DevOpsPlayground() {
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-4">
                                             <div
-                                                className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${isActive ? 'bg-white/10' : 'bg-white/5'
+                                                className={`w-10 h-10 rounded-lg flex items-center justify-center transition-colors ${isActive ? 'bg-accent-blue/10 text-accent-blue' : 'bg-black/5 dark:bg-white/5'
                                                     }`}
                                             >
-                                                <Icon size={20} style={{ color: isActive ? stage.color : '#6b7280' }} />
+                                                <Icon size={20} style={{ color: isActive ? stage.color : undefined }} className={!isActive ? "text-gray-500" : ""} />
                                             </div>
                                             <div>
-                                                <h4 className={`font-bold transition-colors ${isActive ? 'text-white' : 'text-gray-500'}`}>
+                                                <h4 className={`font-bold transition-colors ${isActive ? 'text-foreground' : 'text-foreground-muted'}`}>
                                                     {stage.name}
                                                 </h4>
-                                                <p className="text-xs text-gray-500">Stage 0{index + 1}</p>
+                                                <p className="text-xs text-foreground-muted">Stage 0{index + 1}</p>
                                             </div>
                                         </div>
 
                                         <ChevronRight
                                             size={16}
-                                            className={`transition-transform duration-300 ${isActive ? 'text-white translate-x-1' : 'text-gray-600'}`}
+                                            className={`transition-transform duration-300 ${isActive ? 'text-foreground translate-x-1' : 'text-foreground-muted'}`}
                                         />
                                     </div>
                                 </motion.div>
