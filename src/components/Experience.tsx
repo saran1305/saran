@@ -83,19 +83,19 @@ function ExperienceCard({
             initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
             animate={isInView ? { opacity: 1, x: 0 } : {}}
             transition={{ delay: index * 0.2, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="relative grid grid-cols-[1fr_auto_1fr] gap-8 items-start"
+            className="relative flex flex-col md:grid md:grid-cols-[1fr_auto_1fr] gap-8 items-start"
         >
             {/* Content - alternating sides */}
-            <div className={`${index % 2 === 0 ? 'col-start-1' : 'col-start-3 order-3'}`}>
+            <div className={`order-3 md:order-none ${index % 2 === 0 ? 'md:col-start-1' : 'md:col-start-3 md:order-3'}`}>
                 <motion.div
                     layout
-                    className="glass-card p-8 group hover:border-accent-blue/30 transition-all duration-300"
+                    className="glass-card p-6 md:p-8 group hover:border-accent-blue/30 transition-all duration-300"
                 >
                     {/* Header */}
-                    <div className="flex items-start justify-between mb-4">
+                    <div className="flex flex-col md:flex-row md:items-start justify-between mb-4 gap-2">
                         <div>
-                            <h3 className="text-xl font-bold mb-1">{experience.title}</h3>
-                            <div className="flex items-center gap-2 text-foreground-muted">
+                            <h3 className="text-lg md:text-xl font-bold mb-1">{experience.title}</h3>
+                            <div className="flex items-center gap-2 text-foreground-muted text-sm md:text-base">
                                 <Building2 className="w-4 h-4" />
                                 <span>{experience.company}</span>
                             </div>
@@ -103,7 +103,7 @@ function ExperienceCard({
                     </div>
 
                     {/* Meta info */}
-                    <div className="flex flex-wrap gap-4 text-sm text-foreground-muted mb-4">
+                    <div className="flex flex-wrap gap-3 md:gap-4 text-xs md:text-sm text-foreground-muted mb-4">
                         <div className="flex items-center gap-1">
                             <Calendar className="w-4 h-4" />
                             {experience.period}
@@ -115,7 +115,7 @@ function ExperienceCard({
                     </div>
 
                     {/* Description */}
-                    <p className="text-foreground-muted mb-4">{experience.description}</p>
+                    <p className="text-foreground-muted mb-4 text-sm md:text-base">{experience.description}</p>
 
                     {/* Expand button */}
                     <button
@@ -142,10 +142,10 @@ function ExperienceCard({
                                 className="overflow-hidden"
                             >
                                 <div className="pt-4 mt-4 border-t border-glass-border">
-                                    <h4 className="font-semibold mb-3">Key Achievements</h4>
+                                    <h4 className="font-semibold mb-3 text-sm md:text-base">Key Achievements</h4>
                                     <ul className="space-y-2">
                                         {experience.highlights.map((highlight, i) => (
-                                            <li key={i} className="flex items-start gap-2 text-foreground-muted">
+                                            <li key={i} className="flex items-start gap-2 text-foreground-muted text-sm md:text-base">
                                                 <span className="w-1.5 h-1.5 rounded-full bg-accent-blue mt-2 shrink-0" />
                                                 {highlight}
                                             </li>
@@ -170,8 +170,12 @@ function ExperienceCard({
                 </motion.div>
             </div>
 
-            {/* Timeline line and dot */}
-            <div className="col-start-2 flex flex-col items-center">
+            {/* Timeline line and dot (Desktop only or adjusted for mobile) */}
+            {/* On mobile, we might want to hide the central line connector or adjust it. 
+                For simplicity in this refactor, I'll keep it but ensure it doesn't break layout. 
+                Actually, the central line is drawn in the parent component. 
+                Here we just position the dot. */}
+            <div className="hidden md:flex md:col-start-2 flex-col items-center">
                 <motion.div
                     initial={{ scale: 0 }}
                     animate={isInView ? { scale: 1 } : {}}
@@ -182,7 +186,7 @@ function ExperienceCard({
             </div>
 
             {/* Empty space for alternating layout */}
-            <div className={`${index % 2 === 0 ? 'col-start-3 order-3' : 'col-start-1'}`} />
+            <div className={`hidden md:block ${index % 2 === 0 ? 'md:col-start-3 md:order-3' : 'md:col-start-1'}`} />
         </motion.div>
     );
 }
@@ -220,12 +224,12 @@ export default function Experience() {
                 {/* Timeline */}
                 <div className="relative max-w-5xl mx-auto">
                     {/* Central Base Line */}
-                    <div className="absolute left-1/2 top-0 bottom-0 w-px bg-glass-border -translate-x-1/2" />
+                    <div className="absolute left-1/2 top-0 bottom-0 w-px bg-glass-border -translate-x-1/2 hidden md:block" />
 
                     {/* Glowing Scroll Progress Line */}
                     <motion.div
                         style={{ height: useTransform(useScroll({ target: sectionRef, offset: ["start center", "end center"] }).scrollYProgress, [0, 1], ["0%", "100%"]) }}
-                        className="absolute left-1/2 top-0 w-px bg-gradient-to-b from-blue-500 via-purple-500 to-blue-500 -translate-x-1/2 shadow-[0_0_15px_rgba(59,130,246,0.6)] z-0"
+                        className="absolute left-1/2 top-0 w-px bg-gradient-to-b from-blue-500 via-purple-500 to-blue-500 -translate-x-1/2 shadow-[0_0_15px_rgba(59,130,246,0.6)] z-0 hidden md:block"
                     />
 
                     {/* Experience cards */}

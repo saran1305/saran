@@ -10,22 +10,22 @@
   --foreground: #ffffff;
   --foreground-muted: #a1a1a1;
   --foreground-subtle: #666666;
-  
+
   /* Accent Colors */
   --accent-primary: #ffffff;
   --accent-glow: rgba(255, 255, 255, 0.1);
   --accent-blue: #3b82f6;
   --accent-blue-glow: rgba(59, 130, 246, 0.2);
-  
+
   /* Glass Effects */
   --glass-background: rgba(255, 255, 255, 0.03);
   --glass-border: rgba(255, 255, 255, 0.1);
   --glass-blur: 20px;
-  
+
   /* Shadows */
   --shadow-glow: 0 0 40px rgba(255, 255, 255, 0.05);
   --shadow-card: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-  
+
   /* Transitions */
   --transition-fast: 150ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-base: 300ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -38,13 +38,13 @@
   --foreground: #0a0a0a;
   --foreground-muted: #525252;
   --foreground-subtle: #a3a3a3;
-  
+
   --accent-primary: #0a0a0a;
   --accent-glow: rgba(0, 0, 0, 0.05);
-  
+
   --glass-background: rgba(0, 0, 0, 0.02);
   --glass-border: rgba(0, 0, 0, 0.1);
-  
+
   --shadow-glow: 0 0 40px rgba(0, 0, 0, 0.03);
   --shadow-card: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
 }
@@ -66,8 +66,10 @@
    GLOBAL STYLES
    ============================================ */
 
-* {
-  cursor: none !important;
+@media (pointer: fine) {
+  * {
+    cursor: none !important;
+  }
 }
 
 html {
@@ -224,18 +226,37 @@ body {
    ============================================ */
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-20px); }
+
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-20px);
+  }
 }
 
 @keyframes pulse-glow {
-  0%, 100% { box-shadow: 0 0 20px rgba(255, 255, 255, 0.1); }
-  50% { box-shadow: 0 0 40px rgba(255, 255, 255, 0.2); }
+
+  0%,
+  100% {
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.1);
+  }
+
+  50% {
+    box-shadow: 0 0 40px rgba(255, 255, 255, 0.2);
+  }
 }
 
 @keyframes shimmer {
-  0% { background-position: -200% center; }
-  100% { background-position: 200% center; }
+  0% {
+    background-position: -200% center;
+  }
+
+  100% {
+    background-position: 200% center;
+  }
 }
 
 .animate-float {
@@ -247,12 +268,10 @@ body {
 }
 
 .animate-shimmer {
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.1) 50%,
-    transparent 100%
-  );
+  background: linear-gradient(90deg,
+      transparent 0%,
+      rgba(255, 255, 255, 0.1) 50%,
+      transparent 100%);
   background-size: 200% 100%;
   animation: shimmer 3s ease-in-out infinite;
 }
@@ -284,8 +303,4 @@ body {
    HIDE CURSOR ON TOUCH DEVICES
    ============================================ */
 
-@media (pointer: coarse) {
-  * {
-    cursor: auto !important;
-  }
-}
+/* Cursor handling moved to main rule */

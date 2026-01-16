@@ -66,7 +66,7 @@ function ContactLink({
             initial={{ opacity: 0, y: 30 }}
             animate={isInView ? { opacity: 1, y: 0 } : {}}
             transition={{ delay: index * 0.1 }}
-            className="group glass-card p-6 flex items-center gap-4 hover:border-accent-blue/30 transition-all duration-300"
+            className="group glass-card p-4 md:p-6 flex items-center gap-4 hover:border-accent-blue/30 transition-all duration-300"
             data-magnetic="true"
         >
             <div className="w-12 h-12 rounded-xl bg-glass-background flex items-center justify-center group-hover:bg-accent-blue/10 transition-colors">
@@ -219,7 +219,7 @@ export default function Contact() {
                     <motion.div
                         initial={{ opacity: 0, y: 30 }}
                         animate={isInView ? { opacity: 1, y: 0 } : {}}
-                        className="glass-card p-6 mb-8 relative overflow-hidden w-full max-w-2xl"
+                        className="glass-card p-4 md:p-6 mb-8 relative overflow-hidden w-full max-w-2xl"
                     >
                         <div className="flex items-center justify-between mb-4 relative z-10">
                             <div className="flex items-center gap-4">
