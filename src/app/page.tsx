@@ -21,7 +21,7 @@ const Hero = dynamic(() => import("@/components/Hero"), {
   ssr: false,
 });
 
-const MAINTENANCE_MODE = true;
+const MAINTENANCE_MODE = false;
 
 export default function Home() {
   const [isLoading, setIsLoading] = React.useState(true);
