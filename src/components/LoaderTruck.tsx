@@ -47,7 +47,7 @@ function CartoonTruck() {
                 ...prev,
                 {
                     id: Date.now(),
-                    pos: [truckRef.current!.position.x - 2, 0, 0], // Spawn behind
+                    pos: [truckRef.current!.position.x - 2, 0, 0] as [number, number, number], // Spawn behind
                     color: ['#06b6d4', '#a855f7', '#3b82f6'][Math.floor(Math.random() * 3)]
                 }
             ].slice(-10)); // Keep last 10
