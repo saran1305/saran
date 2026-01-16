@@ -14,13 +14,21 @@ import Loader from "@/components/LoaderTerminal";
 import ChatWidget from "@/components/ChatWidget";
 
 
+import MaintenanceUI from "@/components/MaintenanceUI";
+
 // Lazy load Hero component with 3D to improve initial load
 const Hero = dynamic(() => import("@/components/Hero"), {
   ssr: false,
 });
 
+const MAINTENANCE_MODE = true;
+
 export default function Home() {
   const [isLoading, setIsLoading] = React.useState(true);
+
+  if (MAINTENANCE_MODE) {
+    return <MaintenanceUI />;
+  }
 
   return (
     <main className="relative">
