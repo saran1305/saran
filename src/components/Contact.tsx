@@ -85,9 +85,11 @@ import { Canvas, useFrame, useLoader } from '@react-three/fiber';
 import { OrbitControls, Sphere, useTexture } from '@react-three/drei';
 import * as THREE from 'three';
 
+import { getAssetPath } from '@/utils/config';
+
 function MiniGlobe({ isHovered, onHover, onLeave }: { isHovered: boolean, onHover: () => void, onLeave: () => void }) {
     const meshRef = useRef<THREE.Mesh>(null);
-    const texture = useTexture('/textures/earth.png');
+    const texture = useTexture(getAssetPath('/textures/earth.png'));
 
     // Chennai Coordinates: 13.0827° N, 80.2707° E
     // Convert to rotation (Approximate adjustment for standard texture mapping)

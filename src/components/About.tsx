@@ -4,10 +4,12 @@ import React, { useRef } from 'react';
 import Image from 'next/image';
 import { motion, useInView } from 'framer-motion';
 
+import { getAssetPath } from '@/utils/config';
+
 const profileImages = [
-    '/profile.png',
-    '/profile-slideshow/slide-2.png',
-    '/profile-slideshow/slide-3.png'
+    getAssetPath('/profile.png'),
+    getAssetPath('/profile-slideshow/slide-2.png'),
+    getAssetPath('/profile-slideshow/slide-3.png')
 ];
 
 export default function About() {
