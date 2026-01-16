@@ -24,7 +24,7 @@ function ServerUnit() {
             {Array.from({ length: 8 }).map((_, i) => (
                 <mesh key={i} position={[0, -1.5 + i * 0.45, 1.01]}>
                     <planeGeometry args={[1.6, 0.2]} />
-                    <meshEmissiveMaterial
+                    <meshStandardMaterial
                         color={i % 2 === 0 ? "#0ea5e9" : "#3b82f6"}
                         emissive={i % 2 === 0 ? "#0ea5e9" : "#3b82f6"}
                         emissiveIntensity={2}
