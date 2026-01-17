@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useRef, useState, useEffect } from 'react';
-import { Canvas, useFrame } from '@react-three/fiber';
+import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import { PerspectiveCamera, Float, Text, Plane } from '@react-three/drei';
 import * as THREE from 'three';
 import { EffectComposer, Bloom, Glitch } from '@react-three/postprocessing';
@@ -9,6 +9,12 @@ import { EffectComposer, Bloom, Glitch } from '@react-three/postprocessing';
 // --- Keyboard Sound Removed per user request ---
 
 function TerminalWindow({ onComplete }: { onComplete?: () => void }) {
+    const { viewport } = useThree();
+    const isMobile = viewport.width < 5; // Approximate threshold
+
+    // Responsive scaling
+    const scale = isMobile ? viewport.width / 6.5 : 1; // Fit within width
+
     const [text, setText] = useState('> ');
     const fullText = `import React from 'react';\n\nconst Portfolio = () => {\n  return <DigitalTransformation />;\n};\n\nexport default Portfolio;`;
 
@@ -39,7 +45,7 @@ function TerminalWindow({ onComplete }: { onComplete?: () => void }) {
     }, []);
 
     return (
-        <group>
+        <group scale={scale}>
             {/* Glass Panel */}
             <mesh position={[0, 0, -0.1]}>
                 <planeGeometry args={[6, 3]} />
