@@ -194,19 +194,32 @@ export default function CustomCursor() {
 
                 if (!isVisible) setIsVisible(true);
 
-                if (particlesRef.current && Math.random() > 0.5) {
+                // Higher density for touch (90% chance) to ensure it's visible under finger
+                if (particlesRef.current && Math.random() > 0.1) {
                     particlesRef.current.addParticle(touch.clientX, touch.clientY);
                 }
 
-                // Optional: Play sound on touch move? Maybe less frequent to avoid annoyance
-                if (isSoundEnabledRef.current && soundRef.current && Math.random() > 0.9) {
+                // More frequent sound on mobile to match the tactile feel
+                if (isSoundEnabledRef.current && soundRef.current && Math.random() > 0.7) {
                     soundRef.current.play();
                 }
             }
         };
 
         const handleMouseDown = () => setIsVisible(true);
-        const handleTouchStart = () => setIsVisible(true);
+        const handleTouchStart = (e: TouchEvent) => {
+            setIsVisible(true);
+            // Ensure audio context is resumed on first touch
+            if (isSoundEnabledRef.current && soundRef.current) {
+                soundRef.current.play();
+            }
+            // Spawn a burst of sparkles on touch contact
+            if (particlesRef.current && e.touches.length > 0) {
+                for (let i = 0; i < 3; i++) {
+                    particlesRef.current.addParticle(e.touches[0].clientX, e.touches[0].clientY);
+                }
+            }
+        };
         // const handleTouchEnd = () => setIsVisible(false); // Optional: hide when lifting finger?
 
         const handleMouseOver = (e: MouseEvent) => {
