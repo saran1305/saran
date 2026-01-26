@@ -62,95 +62,97 @@ function useWebcam() {
 
 // --- 3D Components ---
 
-// iPhone 13 Green (Alpine Green) Model
+// Simplified "Generic Flagship" Phone (Matte Black)
 function MobilePhone({ scrollProgress, isDark }: { scrollProgress: number; isDark: boolean }) {
     const groupRef = useRef<THREE.Group>(null);
-    const videoTexture = useWebcam();
+    const videoTexture = useWebcam(); // Use shared hook
 
+    // Improved Animation Logic
     useFrame((state) => {
         if (groupRef.current) {
-            // Floating
-            groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.5) * 0.05 - 0.2;
+            // 1. Subtle "Breathing" Float
+            // Slower, gentler vertical movement
+            groupRef.current.position.y = Math.sin(state.clock.elapsedTime * 0.8) * 0.08 - 0.2;
 
-            // Rotation
-            groupRef.current.rotation.x = 0.1 + scrollProgress * 0.1;
-            groupRef.current.rotation.y = -0.2 + scrollProgress * 2.5;
+            // 2. Mouse/Parallax Influence (Simulated with time if no mouse interaction, but keeping it simple for now)
+            // Just a very subtle sway
+            groupRef.current.rotation.z = Math.sin(state.clock.elapsedTime * 0.5) * 0.02;
+
+            // 3. Scroll Interaction - NO SPINNING
+            // Instead of rotating 360, we just tilt it slightly to face up/down or add depth
+            // Previously: rotation.y = -0.2 + scrollProgress * 2.5 (Too dizzy)
+            // New: slight tilt on X axis to show depth, constant manageable Y rotation
+
+            // X-axis: starts slightly tilted back, straightens out
+            groupRef.current.rotation.x = 0.15 - scrollProgress * 0.1;
+
+            // Y-axis: Very gentle pan from slightly left to slightly right (max 30 degrees total)
+            groupRef.current.rotation.y = -0.15 + scrollProgress * 0.3;
         }
     });
 
-    // Alpine Green colors
-    const bodyColor = "#394c38";
-    const frameColor = "#2a382b";
+    const bodyColor = "#1a1a1a"; // Matte Black
+    const frameColor = "#2d2d2d"; // Dark Grey Frame
 
     return (
-        <Float speed={1} rotationIntensity={0.2} floatIntensity={0.3}>
+        <Float speed={1.5} rotationIntensity={0.1} floatIntensity={0.2}>
             <group ref={groupRef} scale={0.8} rotation={[0, 0, 0]}>
                 {/* --- CHASSIS --- */}
 
-                {/* Aluminum Frame (Side Band) */}
+                {/* Metal Frame */}
                 <RoundedBox args={[1.22, 2.42, 0.14]} radius={0.16} smoothness={4}>
-                    <meshStandardMaterial color={frameColor} metalness={0.8} roughness={0.2} />
+                    <meshStandardMaterial color={frameColor} metalness={0.8} roughness={0.3} />
                 </RoundedBox>
 
-                {/* Glass Back */}
+                {/* Matte Back Glass */}
                 <group position={[0, 0, -0.01]}>
                     <RoundedBox args={[1.2, 2.4, 0.13]} radius={0.16} smoothness={4}>
                         <meshPhysicalMaterial
                             color={bodyColor}
-                            metalness={0.1}
-                            roughness={0.2}
-                            clearcoat={1}
-                            clearcoatRoughness={0.1}
-                            envMapIntensity={1.5}
+                            metalness={0.4}
+                            roughness={0.4} // Matte finish
+                            clearcoat={0.5}
+                            envMapIntensity={1}
                         />
                     </RoundedBox>
                 </group>
 
-                {/* --- CAMERA MODULE (iPhone 13 Diagonal Layout) --- */}
-                <group position={[0.35, 0.85, -0.08]} rotation={[0, 0, 0]}>
-                    {/* Camera Bump Square */}
-                    <RoundedBox args={[0.55, 0.55, 0.05]} radius={0.1} smoothness={4}>
+                {/* --- CAMERA MODULE (Simplified Pillar) --- */}
+                <group position={[0.35, 0.85, -0.08]}>
+                    {/* Vertical Pill Bump */}
+                    <RoundedBox args={[0.4, 0.8, 0.05]} radius={0.15} smoothness={4}>
                         <meshPhysicalMaterial
                             color={bodyColor}
-                            metalness={0.1}
-                            roughness={0.2}
-                            clearcoat={1}
-                            transparent
-                            opacity={0.9}
+                            metalness={0.5}
+                            roughness={0.4}
+                            clearcoat={0.5}
                         />
                     </RoundedBox>
 
-                    {/* Lens 1 (Top Left) */}
-                    <mesh position={[-0.15, 0.15, -0.04]} rotation={[Math.PI, 0, 0]}>
+                    {/* Lens 1 (Top) */}
+                    <mesh position={[0, 0.2, -0.04]} rotation={[Math.PI, 0, 0]}>
                         <cylinderGeometry args={[0.12, 0.12, 0.05, 32]} />
-                        <meshStandardMaterial color="#111" metalness={0.9} roughness={0.1} />
-                        {/* Lens Glass */}
+                        <meshStandardMaterial color="#050505" metalness={0.9} roughness={0.1} />
                         <mesh position={[0, 0.03, 0]}>
                             <cylinderGeometry args={[0.08, 0.08, 0.01, 32]} />
-                            <meshBasicMaterial color="#000" />
-                        </mesh>
-                        <mesh position={[0, 0.035, 0]}>
-                            <cylinderGeometry args={[0.04, 0.04, 0.01, 32]} />
-                            <meshBasicMaterial color="#1a2b3c" /> {/* Lens reflection tint */}
+                            <meshBasicMaterial color="#111" />
                         </mesh>
                     </mesh>
 
-                    {/* Lens 2 (Bottom Right - Diagonal) */}
-                    <mesh position={[0.15, -0.15, -0.04]} rotation={[Math.PI, 0, 0]}>
+                    {/* Lens 2 (Bottom) */}
+                    <mesh position={[0, -0.2, -0.04]} rotation={[Math.PI, 0, 0]}>
                         <cylinderGeometry args={[0.12, 0.12, 0.05, 32]} />
-                        <meshStandardMaterial color="#111" metalness={0.9} roughness={0.1} />
-                        {/* Lens Glass */}
+                        <meshStandardMaterial color="#050505" metalness={0.9} roughness={0.1} />
                         <mesh position={[0, 0.03, 0]}>
                             <cylinderGeometry args={[0.08, 0.08, 0.01, 32]} />
-                            <meshBasicMaterial color="#000" />
+                            <meshBasicMaterial color="#111" />
                         </mesh>
                     </mesh>
                 </group>
-
 
                 {/* --- FRONT SCREEN --- */}
 
-                {/* Black Bezel Area */}
+                {/* Bezel */}
                 <group position={[0, 0, 0.06]}>
                     <RoundedBox args={[1.15, 2.35, 0.02]} radius={0.14} smoothness={4}>
                         <meshStandardMaterial color="#000" metalness={0.2} roughness={0.2} />
@@ -165,16 +167,16 @@ function MobilePhone({ scrollProgress, isDark }: { scrollProgress: number; isDar
                     ) : (
                         <meshPhysicalMaterial
                             color="#000000"
-                            metalness={0.4} roughness={0.2}
-                            clearcoat={1} clearcoatRoughness={0.1}
+                            metalness={0.8} roughness={0.2}
+                            clearcoat={1}
                             emissive="#000000"
                         />
                     )}
                 </mesh>
 
-                {/* Notch */}
-                <mesh position={[0, 1.08, 0.072]}>
-                    <capsuleGeometry args={[0.06, 0.25, 4, 8]} />
+                {/* Dynamic Island / Notch Pill */}
+                <mesh position={[0, 1.05, 0.072]} rotation={[0, 0, Math.PI / 2]}>
+                    <capsuleGeometry args={[0.06, 0.2, 4, 8]} />
                     <meshBasicMaterial color="#000" />
                 </mesh>
 
