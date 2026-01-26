@@ -162,10 +162,6 @@ export default function CustomCursor() {
     const cursorYSpring = useSpring(cursorY, springConfig);
 
     useEffect(() => {
-        if (typeof window !== 'undefined' && window.matchMedia('(pointer: coarse)').matches) {
-            return;
-        }
-
         // Initialize Sound & Visuals
         soundRef.current = new SparkleSound();
         if (canvasRef.current) {
@@ -185,13 +181,33 @@ export default function CustomCursor() {
             }
 
             // 3. Play Sparkle Sound (Throttled Web Audio)
-            // Use velocity check or simple throttle handled in class
-            if (isSoundEnabledRef.current && soundRef.current && Math.random() > 0.8) { // Only play sometimes on move for "twinkle" effect
+            if (isSoundEnabledRef.current && soundRef.current && Math.random() > 0.8) {
                 soundRef.current.play();
             }
         };
 
+        const handleTouchMove = (e: TouchEvent) => {
+            if (e.touches.length > 0) {
+                const touch = e.touches[0];
+                cursorX.set(touch.clientX);
+                cursorY.set(touch.clientY);
+
+                if (!isVisible) setIsVisible(true);
+
+                if (particlesRef.current && Math.random() > 0.5) {
+                    particlesRef.current.addParticle(touch.clientX, touch.clientY);
+                }
+
+                // Optional: Play sound on touch move? Maybe less frequent to avoid annoyance
+                if (isSoundEnabledRef.current && soundRef.current && Math.random() > 0.9) {
+                    soundRef.current.play();
+                }
+            }
+        };
+
         const handleMouseDown = () => setIsVisible(true);
+        const handleTouchStart = () => setIsVisible(true);
+        // const handleTouchEnd = () => setIsVisible(false); // Optional: hide when lifting finger?
 
         const handleMouseOver = (e: MouseEvent) => {
             const target = e.target as HTMLElement;
@@ -209,13 +225,17 @@ export default function CustomCursor() {
         const handleMouseOut = () => setIsHovering(false);
 
         window.addEventListener('mousemove', handleMouseMove, { passive: true });
+        window.addEventListener('touchmove', handleTouchMove, { passive: true });
         window.addEventListener('mousedown', handleMouseDown, { passive: true });
+        window.addEventListener('touchstart', handleTouchStart, { passive: true });
         window.addEventListener('mouseover', handleMouseOver, { passive: true });
         window.addEventListener('mouseout', handleMouseOut, { passive: true });
 
         return () => {
             window.removeEventListener('mousemove', handleMouseMove);
+            window.removeEventListener('touchmove', handleTouchMove);
             window.removeEventListener('mousedown', handleMouseDown);
+            window.removeEventListener('touchstart', handleTouchStart);
             window.removeEventListener('mouseover', handleMouseOver);
             window.removeEventListener('mouseout', handleMouseOut);
             particlesRef.current?.destroy();
