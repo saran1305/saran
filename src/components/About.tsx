@@ -66,7 +66,7 @@ export default function About() {
                                         <Image
                                             key={src}
                                             src={src}
-                                            alt="Saran M - Digital Transformation Specialist"
+                                            alt="Saran M - Senior Cloud & DevSecOps Engineer"
                                             fill
                                             className={`object-cover object-top transition-opacity duration-700 ${index === currentImageIndex ? 'opacity-100' : 'opacity-0'
                                                 }`}
@@ -114,21 +114,15 @@ export default function About() {
 
                         <div className="space-y-6 text-foreground-muted text-lg leading-relaxed">
                             <p>
-                                With over <span className="text-foreground font-medium">5 years of experience</span> in
-                                digital transformation, I specialize in architecting scalable front-end solutions and
-                                building resilient cloud infrastructure that powers modern enterprises.
+                                With <span className="text-foreground font-medium">5+ years of experience</span> as a Senior Cloud and DevSecOps Engineer, I specialize in cloud infrastructure, CI/CD automation, and production operations across AWS, GCP, and Azure.
                             </p>
 
                             <p>
-                                I lead cross-functional teams to deliver high-impact projects that bridge the gap between
-                                complex technical requirements and seamless user experiences. My expertise spans from
-                                crafting pixel-perfect React applications to orchestrating sophisticated CI/CD pipelines
-                                across multi-cloud environments.
+                                I am experienced in designing secure, scalable cloud environments, monitoring, and incident management, ensuring audit readiness for SOC 2 and ISO/IEC 27001 compliance. My expertise includes hands-on implementations with Docker and Kubernetes.
                             </p>
 
                             <p>
-                                I believe in <span className="text-foreground font-medium">building systems that scale</span> —
-                                not just technically, but in a way that empowers teams and accelerates business growth.
+                                I believe in <span className="text-foreground font-medium">building resilient systems</span> that scale securely — empowering teams and accelerating business growth while maintaining the highest standards of operational excellence.
                             </p>
                         </div>
 

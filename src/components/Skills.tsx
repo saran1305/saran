@@ -6,39 +6,32 @@ import { Cpu, Globe, Database, Shield, Layout, Server, Cloud, Lock, Code2, Termi
 
 const skillCategories = [
     {
-        title: 'Frontend Architecture',
-        icon: Layout,
-        skills: ['React.js', 'Redux', 'Redux-Saga', 'Material UI', 'Bootstrap', 'JavaScript', 'HTML5', 'CSS3'],
+        title: 'Cloud Platforms',
+        icon: Cloud,
+        skills: ['AWS', 'Azure', 'GCP'],
         color: '#3b82f6', // Blue
         delay: 0
     },
     {
-        title: 'Cloud Ecosystem',
-        icon: Cloud,
-        skills: ['AWS', 'Azure', 'GCP', 'DigitalOcean', 'Vercel', 'Netlify'],
+        title: 'DevOps & CI/CD',
+        icon: Terminal,
+        skills: ['Git', 'Jenkins', 'Splunk', 'Terraform', 'Ansible', 'Docker', 'Kubernetes'],
         color: '#8b5cf6', // Violet
         delay: 0.1
     },
     {
-        title: 'DevOps & Infrastructure',
-        icon: Terminal,
-        skills: ['Jenkins', 'Docker', 'Terraform', 'Ansible', 'SaltStack', 'Git', 'Linux', 'YAML'],
+        title: 'Scripting & OS',
+        icon: Code2,
+        skills: ['Bash', 'Linux', 'Windows'],
         color: '#f59e0b', // Amber
         delay: 0.2
     },
     {
-        title: 'Backend & Scripting',
-        icon: Code2,
-        skills: ['Node.js', 'Python', 'Ruby', 'Shell Scripting'],
+        title: 'Frontend & Backend',
+        icon: Layout,
+        skills: ['React JS', 'JavaScript', 'Node.js'],
         color: '#ec4899', // Pink
         delay: 0.3
-    },
-    {
-        title: 'Observability & Monitoring',
-        icon: Shield,
-        skills: ['Splunk', 'Prometheus', 'Grafana', 'ELK Stack'],
-        color: '#10b981', // Emerald
-        delay: 0.4
     }
 ];
 

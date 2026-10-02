@@ -407,7 +407,7 @@ export default function Hero() {
                     transition={{ delay: 0.2 }}
                     className="text-xs md:text-sm text-foreground-muted mb-4 tracking-[0.3em] uppercase"
                 >
-                    Saran M • Digital Transformation Specialist
+                    Saran M • Senior Cloud & DevSecOps Engineer
                 </motion.p>
 
                 <motion.h1
@@ -422,6 +422,15 @@ export default function Hero() {
                     {' '}&{' '}
                     <span className="gradient-text-glow">resilient cloud systems</span>
                 </motion.h1>
+
+                <motion.p
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.5 }}
+                    className="text-sm md:text-base text-foreground-muted/80 mb-8 max-w-2xl mx-auto"
+                >
+                    Notice period is fully negotiable | Open to remote interviews
+                </motion.p>
 
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}

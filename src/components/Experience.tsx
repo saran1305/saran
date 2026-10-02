@@ -7,21 +7,36 @@ import { ChevronDown, Calendar, MapPin, Building2 } from 'lucide-react';
 const experiences = [
     {
         id: 1,
-        title: 'Digital Transformation Specialist',
+        title: 'Senior Cloud & DevSecOps Engineer',
         company: 'Ideassion Technology Solutions',
         location: 'Chennai, Tamil Nadu, India (Hybrid)',
-        period: 'Aug 2025 - Present',
-        description: 'Driving R&D and cross-functional collaborations while architecting cloud and DevOps solutions. Leading digital transformation initiatives.',
+        period: 'April 2026 - Present',
+        description: 'Leading cloud infrastructure security, CI/CD automation, and production operations.',
         highlights: [
-            'Spearheading Research and Development (R&D) initiatives',
-            'Driving leadership development and cross-functional collaborations',
-            'Architecting multi-cloud solutions on AWS, Azure, GCP, and DigitalOcean',
-            'Specializing in DevOps practices and modern web technologies (React.js)'
+            'Architecting secure, scalable cloud environments across AWS, GCP, and Azure',
+            'Implementing monitoring and incident management protocols',
+            'Ensuring audit readiness for SOC 2 and ISO/IEC 27001 compliance',
+            'Managing containerized workloads with Docker and Kubernetes'
         ],
-        technologies: ['AWS', 'Azure', 'GCP', 'DigitalOcean', 'DevOps', 'React.js', 'JavaScript'],
+        technologies: ['AWS', 'GCP', 'Azure', 'Docker', 'Kubernetes', 'CI/CD'],
     },
     {
         id: 2,
+        title: 'Digital Transformation Specialist',
+        company: 'Ideassion Technology Solutions',
+        location: 'Chennai, Tamil Nadu, India (Hybrid)',
+        period: 'Aug 2025 - April 2026',
+        description: 'Drove R&D and cross-functional collaborations while architecting cloud and DevOps solutions.',
+        highlights: [
+            'Spearheaded Research and Development (R&D) initiatives',
+            'Drove leadership development and cross-functional collaborations',
+            'Architected multi-cloud solutions on AWS, Azure, GCP, and DigitalOcean',
+            'Specialized in DevOps practices and modern web technologies'
+        ],
+        technologies: ['AWS', 'Azure', 'GCP', 'DigitalOcean', 'DevOps', 'React.js'],
+    },
+    {
+        id: 3,
         title: 'Senior Digital Transformation Engineer',
         company: 'Ideassion Technology Solutions',
         location: 'Chennai, Tamil Nadu, India (Hybrid)',
@@ -33,10 +48,10 @@ const experiences = [
             'Developed scalable applications using React.js and JavaScript',
             'Mentored junior engineers and led technical decision making'
         ],
-        technologies: ['AWS', 'Azure', 'GCP', 'DigitalOcean', 'DevOps', 'React.js', 'JavaScript'],
+        technologies: ['AWS', 'Azure', 'GCP', 'DevOps', 'React.js', 'JavaScript'],
     },
     {
-        id: 3,
+        id: 4,
         title: 'Digital Transformation Engineer',
         company: 'Ideassion Technology Solutions',
         location: 'Chennai, Tamil Nadu, India (Hybrid)',
@@ -48,10 +63,10 @@ const experiences = [
             'Managed cloud resources on AWS and Microsoft Azure',
             'Collaborated on full lifecycle software development'
         ],
-        technologies: ['React.js', 'Node.js', 'AWS', 'Azure', 'JavaScript', 'CSS'],
+        technologies: ['React.js', 'Node.js', 'AWS', 'Azure', 'JavaScript'],
     },
     {
-        id: 4,
+        id: 5,
         title: 'Digital Transformation Intern',
         company: 'Ideassion Technology Solutions',
         location: 'Chennai, Tamil Nadu, India (On-site)',
