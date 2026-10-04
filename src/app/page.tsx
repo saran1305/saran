@@ -25,8 +25,8 @@ export default function Home() {
         {isLoading && (
           <motion.div
             key="loader"
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.5 }}
+            exit={{ opacity: 0, scale: 0.97, y: -12 }}
+            transition={{ duration: 0.45, ease: [0.22, 1, 0.36, 1] }}
             className="fixed inset-0 z-[9999]"
           >
             <Loader

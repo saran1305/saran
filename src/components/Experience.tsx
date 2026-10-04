@@ -156,9 +156,9 @@ export default function Experience() {
                 <MapPin className="w-3.5 h-3.5 text-accent-blue" />
                 <span>{company.location}</span>
                 <span className="text-white/20">•</span>
-                <span>Aug 2021 – Present</span>
+                <span>Feb 2021 – Present</span>
                 <span className="text-white/20">•</span>
-                <span className="text-accent-blue font-semibold">4 Roles</span>
+                <span className="text-accent-blue font-semibold">5 Roles</span>
               </div>
             </div>
             <div className="shrink-0">
