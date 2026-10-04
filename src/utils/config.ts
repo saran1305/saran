@@ -1,9 +1,7 @@
-export const BASE_PATH = '/saran';
+const BASE_PATH = process.env.NODE_ENV === 'production' ? '/saran' : '';
 
 export const getAssetPath = (path: string) => {
-    // Remove leading slash if present to avoid double slashes if we were joining with a slash
-    // But BASE_PATH has no trailing slash, so we want the leading slash of path.
-    // Actually, simply concatenating is fine as long as consistent.
-    // path '/img.png' -> '/saran/img.png'
+    // In production (GitHub Pages), prepend /saran base path.
+    // In development (localhost:3000), no prefix needed.
     return `${BASE_PATH}${path}`;
 };

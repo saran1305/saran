@@ -2,142 +2,84 @@
 
 import React, { useRef } from 'react';
 import { motion, useInView } from 'framer-motion';
-import { Cpu, Globe, Database, Shield, Layout, Server, Cloud, Lock, Code2, Terminal } from 'lucide-react';
+import { Cloud, Cpu, GitBranch, Shield, Eye, Code, FileCheck, LucideIcon } from 'lucide-react';
+import { PORTFOLIO_DATA } from '@/data/portfolioData';
 
-const skillCategories = [
-    {
-        title: 'Cloud Platforms',
-        icon: Cloud,
-        skills: ['AWS', 'Azure', 'GCP'],
-        color: '#3b82f6', // Blue
-        delay: 0
-    },
-    {
-        title: 'DevOps & CI/CD',
-        icon: Terminal,
-        skills: ['Git', 'Jenkins', 'Splunk', 'Terraform', 'Ansible', 'Docker', 'Kubernetes'],
-        color: '#8b5cf6', // Violet
-        delay: 0.1
-    },
-    {
-        title: 'Scripting & OS',
-        icon: Code2,
-        skills: ['Bash', 'Linux', 'Windows'],
-        color: '#f59e0b', // Amber
-        delay: 0.2
-    },
-    {
-        title: 'Frontend & Backend',
-        icon: Layout,
-        skills: ['React JS', 'JavaScript', 'Node.js'],
-        color: '#ec4899', // Pink
-        delay: 0.3
-    }
-];
-
-function SkillCategoryCard({
-    category,
-    index,
-    isInView
-}: {
-    category: typeof skillCategories[0];
-    index: number;
-    isInView: boolean;
-}) {
-    const Icon = category.icon;
-
-    return (
-        <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={isInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ delay: 0.2 + (index * 0.1), duration: 0.5 }}
-            className="group relative h-full"
-        >
-            <div className="glass-card p-8 h-full hover:border-white/10 transition-colors duration-500 overflow-hidden">
-                {/* Ambient Glow */}
-                <div
-                    className="absolute -top-24 -right-24 w-48 h-48 rounded-full blur-[80px] opacity-0 group-hover:opacity-20 transition-opacity duration-700"
-                    style={{ background: category.color }}
-                />
-
-                {/* Header */}
-                <div className="flex items-center gap-4 mb-8 relative z-10">
-                    <div
-                        className="w-12 h-12 rounded-xl flex items-center justify-center glass border border-white/5 group-hover:scale-110 transition-transform duration-500"
-                        style={{ boxShadow: `0 0 20px ${category.color}10` }}
-                    >
-                        <Icon className="w-6 h-6 transition-colors duration-300" style={{ color: category.color }} />
-                    </div>
-                    <h3 className="text-xl font-bold">{category.title}</h3>
-                </div>
-
-                {/* Skills Grid */}
-                <div className="flex flex-wrap gap-3 relative z-10">
-                    {category.skills.map((skill, i) => (
-                        <motion.span
-                            key={skill}
-                            initial={{ opacity: 0, scale: 0.8 }}
-                            animate={isInView ? { opacity: 1, scale: 1 } : {}}
-                            transition={{ delay: 0.4 + (index * 0.1) + (i * 0.05), duration: 0.3 }}
-                            className="px-4 py-2 rounded-lg text-sm bg-white/5 border border-white/5 hover:bg-white/10 hover:border-white/20 transition-all cursor-default select-none"
-                            whileHover={{ scale: 1.05, y: -2 }}
-                        >
-                            {skill}
-                        </motion.span>
-                    ))}
-                </div>
-            </div>
-        </motion.div>
-    );
-}
+const domainIcons: Record<string, LucideIcon> = {
+  cloud: Cloud,
+  infrastructure: Cpu,
+  cicd: GitBranch,
+  security: Shield,
+  observability: Eye,
+  application: Code,
+  compliance: FileCheck,
+};
 
 export default function Skills() {
-    const sectionRef = useRef<HTMLDivElement>(null);
-    const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
 
-    return (
-        <section
-            id="skills"
-            ref={sectionRef}
-            className="section relative overflow-hidden"
+  return (
+    <section id="skills" ref={sectionRef} className="section relative overflow-hidden bg-background">
+      <div className="container-custom relative z-10">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-16"
         >
-            {/* Background decoration */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-1/4 right-0 w-[500px] h-[500px] bg-accent-blue/5 rounded-full blur-[100px]" />
-                <div className="absolute bottom-1/4 left-0 w-[500px] h-[500px] bg-accent-glow/5 rounded-full blur-[100px]" />
-            </div>
+          <span className="text-sm text-accent-blue tracking-[0.3em] uppercase mb-4 block">
+            Technical Competencies
+          </span>
+          <h2 className="section-title mb-6">
+            Cloud & DevSecOps <span className="gradient-text">Capability Map</span>
+          </h2>
+          <p className="section-subtitle mx-auto">
+            Categorized by engineering domain, representing hands-on production expertise across multi-cloud infrastructure, automation, security, and application systems.
+          </p>
+        </motion.div>
 
-            <div className="container-custom relative z-10">
-                {/* Header */}
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.8 }}
-                    className="text-center mb-20"
-                >
-                    <span className="text-sm text-accent-blue tracking-[0.3em] uppercase mb-4 block">
-                        Technical Arsenal
-                    </span>
-                    <h2 className="section-title mb-6">
-                        Skills & <span className="gradient-text">Technologies</span>
-                    </h2>
-                    <p className="section-subtitle mx-auto">
-                        A comprehensive ecosystem of tools and frameworks for building modern digital solutions.
-                    </p>
-                </motion.div>
+        {/* Domain Cards Grid */}
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {Object.entries(PORTFOLIO_DATA.capabilityMap).map(([key, domain], idx) => {
+            const IconComponent = domainIcons[key] || Cloud;
+            return (
+              <motion.div
+                key={key}
+                initial={{ opacity: 0, y: 20 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: idx * 0.1, duration: 0.6 }}
+                className="glass-card p-6 border border-white/10 hover:border-accent-blue/40 transition-all duration-300 flex flex-col justify-between"
+              >
+                <div>
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="w-10 h-10 rounded-xl bg-accent-blue/10 border border-accent-blue/20 flex items-center justify-center text-accent-blue">
+                      <IconComponent className="w-5 h-5" />
+                    </div>
+                    <h3 className="text-lg font-bold text-white">{domain.title}</h3>
+                  </div>
 
-                {/* Skills Grid - Bento Style */}
-                <div className="grid md:grid-cols-2 gap-6">
-                    {skillCategories.map((category, index) => (
-                        <SkillCategoryCard
-                            key={category.title}
-                            category={category}
-                            index={index}
-                            isInView={isInView}
-                        />
+                  <p className="text-xs text-foreground-muted mb-6 leading-relaxed">
+                    {domain.description}
+                  </p>
+
+                  <div className="flex flex-wrap gap-2">
+                    {domain.items.map((item) => (
+                      <span
+                        key={item}
+                        className="px-3 py-1.5 rounded-lg bg-white/5 border border-white/10 text-xs font-semibold text-gray-200 hover:border-accent-blue/50 transition-colors"
+                      >
+                        {item}
+                      </span>
                     ))}
+                  </div>
                 </div>
-            </div>
-        </section>
-    );
+              </motion.div>
+            );
+          })}
+        </div>
+      </div>
+    </section>
+  );
 }

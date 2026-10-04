@@ -1,37 +1,26 @@
 'use client';
 
-import React from 'react';
-import dynamic from 'next/dynamic';
+import React, { useState } from 'react';
 import { AnimatePresence, motion } from 'framer-motion';
-import Navigation from "@/components/Navigation";
-import About from "@/components/About";
-import Skills from "@/components/Skills";
-import Experience from "@/components/Experience";
-import Projects from "@/components/Projects";
-import DevOpsPlayground from "@/components/DevOpsPlayground";
-import Contact from "@/components/Contact";
-import Loader from "@/components/LoaderTerminal";
-import ChatWidget from "@/components/ChatWidget";
-
-
-import MaintenanceUI from "@/components/MaintenanceUI";
-
-// Lazy load Hero component with 3D to improve initial load
-const Hero = dynamic(() => import("@/components/Hero"), {
-  ssr: false,
-});
-
-const MAINTENANCE_MODE = false;
+import Navigation from '@/components/Navigation';
+import Hero from '@/components/Hero';
+import About from '@/components/About';
+import Skills from '@/components/Skills';
+import Experience from '@/components/Experience';
+import Projects from '@/components/Projects';
+import DevSecOps from '@/components/DevSecOps';
+import ArchitectureLab from '@/components/ArchitectureLab';
+import ProductionLessons from '@/components/ProductionLessons';
+import Blog from '@/components/Blog';
+import Contact from '@/components/Contact';
+import ChatWidget from '@/components/ChatWidget';
+import Loader from '@/components/LoaderTerminal';
 
 export default function Home() {
-  const [isLoading, setIsLoading] = React.useState(true);
-
-  if (MAINTENANCE_MODE) {
-    return <MaintenanceUI />;
-  }
+  const [isLoading, setIsLoading] = useState(true);
 
   return (
-    <main className="relative">
+    <main className="relative min-h-screen bg-background text-foreground selection:bg-accent-blue selection:text-white">
       <AnimatePresence mode="wait">
         {isLoading && (
           <motion.div
@@ -40,10 +29,12 @@ export default function Home() {
             transition={{ duration: 0.5 }}
             className="fixed inset-0 z-[9999]"
           >
-            <Loader onComplete={() => {
-              window.scrollTo(0, 0); // Force scroll to top
-              setIsLoading(false);
-            }} />
+            <Loader
+              onComplete={() => {
+                window.scrollTo(0, 0);
+                setIsLoading(false);
+              }}
+            />
           </motion.div>
         )}
       </AnimatePresence>
@@ -54,7 +45,10 @@ export default function Home() {
       <Skills />
       <Experience />
       <Projects />
-      <DevOpsPlayground />
+      <DevSecOps />
+      <ArchitectureLab />
+      <ProductionLessons />
+      <Blog />
       <Contact />
       <ChatWidget />
     </main>

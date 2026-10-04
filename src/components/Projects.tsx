@@ -2,228 +2,276 @@
 
 import React, { useRef, useState } from 'react';
 import { motion, useInView, AnimatePresence } from 'framer-motion';
-import { ExternalLink, Layers, Cloud, Database, Activity, Code, Server, ArrowUpRight } from 'lucide-react';
+import { Server, Cloud, Database, Activity, ArrowRight, X, Shield, Lock, FileCheck, Cpu, Layers, DollarSign, CheckCircle2, LucideIcon } from 'lucide-react';
+import { PORTFOLIO_DATA, ProjectCaseStudy } from '@/data/portfolioData';
 
-type ProjectDomain = 'development' | 'cloud-devops';
-
-const projects = [
-    {
-        id: 1,
-        title: 'Glido (Logistics)',
-        domain: 'cloud-devops' as ProjectDomain,
-        category: 'GCP Cloud Architecture',
-        description: 'Designed and deployed a production GCP setup with Cloud Run, Cloud SQL, CDN, and global HTTPS load balancing.',
-        icon: Server,
-        technologies: ['GCP', 'Cloud Run', 'PostgreSQL', 'Secret Manager'],
-        metrics: [
-            { label: 'Audit', value: 'SOC 2 Ready' },
-            { label: 'Security', value: 'ISO 27001' },
-        ],
-        color: '#3b82f6', // Blue
-    },
-    {
-        id: 2,
-        title: 'SRD (Logistics)',
-        domain: 'cloud-devops' as ProjectDomain,
-        category: 'AWS Cloud & CI/CD',
-        description: 'Set up a production AWS environment with automated Jenkins pipelines, database backups, and robust alerting.',
-        icon: Cloud,
-        technologies: ['AWS EC2', 'Jenkins', 'Nginx', 'PostgreSQL'],
-        metrics: [
-            { label: 'Uptime', value: '99.9%' },
-            { label: 'Deploy', value: 'Symlink' },
-        ],
-        color: '#8b5cf6', // Violet
-    },
-    {
-        id: 3,
-        title: 'Assure Bharath',
-        domain: 'cloud-devops' as ProjectDomain,
-        category: 'VPS Containerization',
-        description: 'Containerized frontend and backend applications with Docker and established CI/CD using GitHub Actions.',
-        icon: Database,
-        technologies: ['Docker', 'GitHub Actions', 'Nginx', 'VPS'],
-        metrics: [
-            { label: 'Automation', value: 'CI/CD' },
-            { label: 'Security', value: 'SSL/HTTPS' },
-        ],
-        color: '#f59e0b', // Amber
-    },
-    {
-        id: 4,
-        title: 'Ackumen Dashboard',
-        domain: 'development' as ProjectDomain,
-        category: 'Frontend Development',
-        description: 'Built enterprise React applications featuring connected planning, forecasting, and gamified badging modules.',
-        icon: Activity,
-        technologies: ['React.js', 'Redux', 'Redux-Saga', 'REST API'],
-        metrics: [
-            { label: 'UX/UI', value: 'Enterprise' },
-            { label: 'Performance', value: 'Optimized' },
-        ],
-        color: '#10b981', // Emerald
-    },
-];
-
-function ProjectCard({
-    project,
-    index,
-}: {
-    project: typeof projects[0];
-    index: number;
-}) {
-    const Icon = project.icon;
-
-    return (
-        <motion.div
-            layout
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            exit={{ opacity: 0, scale: 0.9 }}
-            transition={{ duration: 0.3 }}
-            className="group relative"
-        >
-            <div className="relative h-full glass-card p-8 overflow-hidden transition-all duration-500 hover:translate-y-[-5px] hover:shadow-2xl">
-                {/* Background Gradient & Glow */}
-                <div
-                    className="absolute -top-20 -right-20 w-64 h-64 rounded-full blur-[100px] opacity-0 group-hover:opacity-20 transition-opacity duration-700"
-                    style={{ background: project.color }}
-                />
-
-                {/* Header */}
-                <div className="relative z-10 flex justify-between items-start mb-6">
-                    <div
-                        className="w-14 h-14 rounded-2xl flex items-center justify-center glass border border-white/10"
-                        style={{ boxShadow: `0 0 20px ${project.color}20` }}
-                    >
-                        <Icon className="w-7 h-7" style={{ color: project.color }} />
-                    </div>
-                    <div className="flex gap-2">
-                        <span className="px-3 py-1 rounded-full text-[10px] font-bold tracking-wider uppercase border border-white/5 bg-white/5 text-foreground-muted">
-                            {project.category}
-                        </span>
-                    </div>
-                </div>
-
-                {/* Content */}
-                <div className="relative z-10">
-                    <h3 className="text-2xl font-bold mb-3 group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-white/70 transition-all">
-                        {project.title}
-                    </h3>
-                    <p className="text-foreground-muted mb-6 leading-relaxed line-clamp-3">
-                        {project.description}
-                    </p>
-
-                    {/* Metrics Grid */}
-                    <div className="grid grid-cols-2 gap-4 mb-6">
-                        {project.metrics.map((metric) => (
-                            <div key={metric.label} className="bg-white/5 rounded-xl p-3 border border-white/5">
-                                <div className="text-lg font-bold" style={{ color: project.color }}>
-                                    {metric.value}
-                                </div>
-                                <div className="text-xs text-foreground-muted uppercase tracking-wider">
-                                    {metric.label}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-
-                    {/* Footer / Tech Stack */}
-                    <div className="flex flex-wrap gap-2 pt-6 border-t border-white/5">
-                        {project.technologies.map((tech) => (
-                            <span key={tech} className="text-xs text-foreground-muted px-2 py-1 rounded-md bg-white/5">
-                                {tech}
-                            </span>
-                        ))}
-                    </div>
-                </div>
-
-                {/* Hover overlay border */}
-                <div
-                    className="absolute inset-0 rounded-[inherit] border-2 border-transparent group-hover:border-white/10 pointer-events-none transition-colors duration-500"
-                />
-            </div>
-        </motion.div>
-    );
-}
+const iconMap: Record<string, LucideIcon> = {
+  glido: Server,
+  srd: Cloud,
+  'assure-bharath': Database,
+  ackumen: Activity,
+};
 
 export default function Projects() {
-    const sectionRef = useRef<HTMLDivElement>(null);
-    const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
-    const [filter, setFilter] = useState<'all' | ProjectDomain>('all');
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
+  const [activeTab, setActiveTab] = useState<'all' | 'cloud-devops' | 'development'>('all');
+  const [activeCaseStudy, setActiveCaseStudy] = useState<ProjectCaseStudy | null>(null);
 
-    const filteredProjects = projects.filter(p => filter === 'all' || p.domain === filter);
+  const filteredProjects = PORTFOLIO_DATA.caseStudies.filter((p) => {
+    if (activeTab === 'all') return true;
+    return p.domain === activeTab;
+  });
 
-    return (
-        <section
-            id="projects"
-            ref={sectionRef}
-            className="section relative overflow-hidden"
+  return (
+    <section id="projects" ref={sectionRef} className="section relative overflow-hidden bg-background">
+      <div className="container-custom relative z-10">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-16"
         >
-            {/* Background decoration */}
-            <div className="absolute inset-0 overflow-hidden pointer-events-none">
-                <div className="absolute top-1/4 -left-64 w-[500px] h-[500px] bg-accent-blue/5 rounded-full blur-[120px]" />
-                <div className="absolute bottom-1/4 -right-64 w-[500px] h-[500px] bg-purple-500/5 rounded-full blur-[120px]" />
-            </div>
+          <span className="text-sm text-accent-blue tracking-[0.3em] uppercase mb-4 block">
+            Technical Credibility & Case Studies
+          </span>
+          <h2 className="section-title mb-6">
+            Featured Production <span className="gradient-text">Case Studies</span>
+          </h2>
+          <p className="section-subtitle mx-auto">
+            Deep technical breakdowns of real-world cloud infrastructure, continuous deployment pipelines, security controls, and application systems.
+          </p>
 
-            <div className="container-custom relative z-10">
-                {/* Header */}
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.8 }}
-                    className="text-center mb-16"
-                >
-                    <span className="text-sm text-accent-blue tracking-[0.3em] uppercase mb-4 block">
-                        Featured Work
-                    </span>
-                    <h2 className="section-title mb-6">
-                        Project <span className="gradient-text">Showcase</span>
-                    </h2>
-                    <p className="section-subtitle mx-auto mb-12">
-                        Designing scalable architectures and intuitive digital experiences.
-                    </p>
+          {/* Filter Tabs */}
+          <div className="inline-flex p-1 rounded-2xl glass border border-white/10 mx-auto mt-8">
+            {(['all', 'cloud-devops', 'development'] as const).map((tab) => (
+              <button
+                key={tab}
+                onClick={() => setActiveTab(tab)}
+                className={`relative px-6 py-2.5 rounded-xl text-xs font-semibold capitalize transition-all ${
+                  activeTab === tab ? 'text-white' : 'text-foreground-muted hover:text-white'
+                }`}
+              >
+                {activeTab === tab && (
+                  <motion.div
+                    layoutId="activeProjTab"
+                    className="absolute inset-0 bg-accent-blue/20 rounded-xl border border-accent-blue/30"
+                    transition={{ type: 'spring', bounce: 0.2, duration: 0.6 }}
+                  />
+                )}
+                <span className="relative z-10">
+                  {tab === 'all' ? 'All Engineering Projects' : tab === 'cloud-devops' ? 'Cloud & DevSecOps' : 'Supporting Application Stack'}
+                </span>
+              </button>
+            ))}
+          </div>
+        </motion.div>
 
-                    {/* Filter Tabs */}
-                    <div className="inline-flex p-1 rounded-2xl glass border border-white/10 mx-auto">
-                        {(['all', 'development', 'cloud-devops'] as const).map((tab) => (
-                            <button
-                                key={tab}
-                                onClick={() => setFilter(tab)}
-                                className={`relative px-6 py-2.5 rounded-xl text-sm font-medium transition-all duration-300 ${filter === tab ? 'text-white' : 'text-foreground-muted hover:text-white'
-                                    }`}
-                            >
-                                {filter === tab && (
-                                    <motion.div
-                                        layoutId="activeTab"
-                                        className="absolute inset-0 bg-accent-blue/20 rounded-xl border border-accent-blue/30"
-                                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                                    />
-                                )}
-                                <span className="relative z-10 capitalize">
-                                    {tab === 'cloud-devops' ? 'Cloud & DevOps' : tab === 'development' ? 'Full Stack Development' : 'All Projects'}
-                                </span>
-                            </button>
-                        ))}
+        {/* Case Study Cards Grid */}
+        <div className="grid lg:grid-cols-2 gap-8">
+          {filteredProjects.map((project, idx) => {
+            const IconComp = iconMap[project.id] || Server;
+            return (
+              <motion.div
+                key={project.id}
+                initial={{ opacity: 0, y: 30 }}
+                animate={isInView ? { opacity: 1, y: 0 } : {}}
+                transition={{ delay: idx * 0.1, duration: 0.6 }}
+                className={`glass-card p-6 md:p-8 border flex flex-col justify-between relative transition-all duration-300 ${
+                  project.flagship
+                    ? 'border-accent-blue/50 shadow-xl shadow-blue-500/5'
+                    : 'border-white/10 hover:border-white/20'
+                }`}
+              >
+                {project.flagship && (
+                  <div className="absolute top-4 right-4 px-3 py-1 rounded-full bg-blue-500/20 text-accent-blue border border-blue-500/30 text-[10px] font-bold uppercase tracking-wider">
+                    Flagship Cloud Architecture
+                  </div>
+                )}
+
+                <div>
+                  <div className="flex items-center gap-3 mb-4">
+                    <div
+                      className="w-12 h-12 rounded-xl flex items-center justify-center glass border border-white/10"
+                      style={{ color: project.color }}
+                    >
+                      <IconComp className="w-6 h-6" />
                     </div>
-                </motion.div>
+                    <div>
+                      <h3 className="text-2xl font-bold text-white">{project.title}</h3>
+                      <p className="text-xs text-foreground-muted">{project.subtitle}</p>
+                    </div>
+                  </div>
 
-                {/* Projects Grid */}
-                <motion.div
-                    layout
-                    className="grid md:grid-cols-2 gap-6 lg:gap-8"
+                  <p className="text-xs text-gray-300 leading-relaxed mb-6">
+                    {project.summary}
+                  </p>
+
+                  {/* Architecture Diagram Preview Flow */}
+                  <div className="p-4 rounded-xl bg-black/40 border border-white/5 mb-6 space-y-2">
+                    <div className="text-[10px] font-mono font-bold text-accent-blue uppercase tracking-wider">
+                      Architecture Pipeline Flow
+                    </div>
+                    <div className="text-xs font-mono text-gray-300 leading-relaxed">
+                      {project.architectureFlow.description}
+                    </div>
+                  </div>
+
+                  {/* Tech Badges */}
+                  <div className="flex flex-wrap gap-1.5 mb-6">
+                    {project.technologies.map((tech) => (
+                      <span key={tech} className="px-2.5 py-1 rounded bg-white/5 border border-white/5 text-[11px] text-gray-300">
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+
+                <button
+                  onClick={() => setActiveCaseStudy(project)}
+                  className="w-full py-3 rounded-xl bg-white/5 hover:bg-accent-blue hover:text-white border border-white/10 text-xs font-semibold text-gray-200 transition-all flex items-center justify-center gap-2 group"
                 >
-                    <AnimatePresence mode="popLayout">
-                        {filteredProjects.map((project, index) => (
-                            <ProjectCard
-                                key={project.id}
-                                project={project}
-                                index={index}
-                            />
-                        ))}
-                    </AnimatePresence>
-                </motion.div>
-            </div>
-        </section>
-    );
+                  <span>View Case Study</span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </button>
+              </motion.div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Case Study Deep-Dive Modal */}
+      <AnimatePresence>
+        {activeCaseStudy && (
+          <div className="fixed inset-0 z-[9999] flex items-center justify-center p-4 md:p-6">
+            <motion.div
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={() => setActiveCaseStudy(null)}
+              className="absolute inset-0 bg-black/80 backdrop-blur-md"
+            />
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              exit={{ opacity: 0, scale: 0.95, y: 20 }}
+              className="relative w-full max-w-4xl max-h-[90vh] bg-[#0c0d12] border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col z-10"
+            >
+              {/* Modal Top Header */}
+              <div className="flex items-center justify-between px-6 py-4 border-b border-white/10 bg-white/5">
+                <div>
+                  <span className="text-[10px] font-mono font-bold text-accent-blue uppercase tracking-wider">
+                    Detailed Case Study Breakdown
+                  </span>
+                  <h3 className="text-xl font-bold text-white">{activeCaseStudy.title} — {activeCaseStudy.subtitle}</h3>
+                </div>
+                <button
+                  onClick={() => setActiveCaseStudy(null)}
+                  className="p-2 rounded-lg text-foreground-muted hover:text-white hover:bg-white/10 transition-colors"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Modal Body */}
+              <div className="flex-1 overflow-y-auto p-6 md:p-10 space-y-8 text-foreground-muted text-sm leading-relaxed">
+                {/* Visual Architecture Flow */}
+                <div className="p-5 rounded-2xl bg-blue-950/20 border border-accent-blue/30 space-y-3">
+                  <div className="text-xs font-bold text-accent-blue uppercase tracking-wider flex items-center gap-2">
+                    <Cpu className="w-4 h-4" /> Production Architecture Flow
+                  </div>
+                  <div className="flex flex-wrap items-center gap-2">
+                    {activeCaseStudy.architectureFlow.nodes.map((node, i) => (
+                      <React.Fragment key={i}>
+                        <span className="px-3 py-1.5 rounded-lg bg-black/60 border border-white/10 text-xs font-mono text-white">
+                          {node}
+                        </span>
+                        {i < activeCaseStudy.architectureFlow.nodes.length - 1 && (
+                          <ArrowRight className="w-3.5 h-3.5 text-accent-blue shrink-0" />
+                        )}
+                      </React.Fragment>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Problem & Solution */}
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="p-5 rounded-xl bg-white/5 border border-white/5 space-y-2">
+                    <h4 className="text-xs font-bold text-red-400 uppercase tracking-wider">Engineering Problem</h4>
+                    <p className="text-xs text-gray-300 leading-relaxed">{activeCaseStudy.problem}</p>
+                  </div>
+                  <div className="p-5 rounded-xl bg-white/5 border border-white/5 space-y-2">
+                    <h4 className="text-xs font-bold text-green-400 uppercase tracking-wider">Architectural Solution</h4>
+                    <p className="text-xs text-gray-300 leading-relaxed">{activeCaseStudy.architecture}</p>
+                  </div>
+                </div>
+
+                {/* Key Implementation Details */}
+                <div>
+                  <h4 className="text-xs font-bold text-accent-blue uppercase tracking-wider mb-3">Key Technical Implementations</h4>
+                  <ul className="space-y-2">
+                    {activeCaseStudy.implementation.map((impl, i) => (
+                      <li key={i} className="flex items-start gap-2.5 text-xs text-gray-300">
+                        <CheckCircle2 className="w-4 h-4 text-accent-blue shrink-0 mt-0.5" />
+                        <span>{impl}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                {/* Security, CI/CD, Monitoring, Compliance */}
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="p-5 rounded-xl bg-white/5 border border-white/5 space-y-2">
+                    <h4 className="text-xs font-bold text-amber-400 uppercase tracking-wider flex items-center gap-1.5">
+                      <Shield className="w-3.5 h-3.5" /> Security & Access Controls
+                    </h4>
+                    <ul className="space-y-1 text-xs text-gray-300">
+                      {activeCaseStudy.securityControls.map((sec, i) => (
+                        <li key={i}>• {sec}</li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="p-5 rounded-xl bg-white/5 border border-white/5 space-y-2">
+                    <h4 className="text-xs font-bold text-blue-400 uppercase tracking-wider flex items-center gap-1.5">
+                      <FileCheck className="w-3.5 h-3.5" /> Compliance & Audit Readiness
+                    </h4>
+                    <p className="text-xs text-gray-300">{activeCaseStudy.compliance}</p>
+                  </div>
+                </div>
+
+                {/* Challenges & Outcome */}
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div className="p-5 rounded-xl bg-white/5 border border-white/5 space-y-2">
+                    <h4 className="text-xs font-bold text-purple-400 uppercase tracking-wider">Engineering Challenges</h4>
+                    <p className="text-xs text-gray-300">{activeCaseStudy.challenges}</p>
+                  </div>
+
+                  <div className="p-5 rounded-xl bg-white/5 border border-white/5 space-y-2">
+                    <h4 className="text-xs font-bold text-emerald-400 uppercase tracking-wider flex items-center gap-1.5">
+                      <DollarSign className="w-3.5 h-3.5" /> Cost & Business Outcome
+                    </h4>
+                    <p className="text-xs text-gray-300">{activeCaseStudy.outcome} ({activeCaseStudy.costConsiderations})</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Modal Footer */}
+              <div className="p-4 bg-white/5 border-t border-white/10 flex justify-between items-center text-xs text-foreground-muted">
+                <span>Role: <strong className="text-white">{activeCaseStudy.role}</strong></span>
+                <button
+                  onClick={() => setActiveCaseStudy(null)}
+                  className="px-4 py-2 rounded-lg bg-white/10 hover:bg-white/20 text-white font-medium transition-colors"
+                >
+                  Close Case Study
+                </button>
+              </div>
+            </motion.div>
+          </div>
+        )}
+      </AnimatePresence>
+    </section>
+  );
 }

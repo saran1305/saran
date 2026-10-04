@@ -1,265 +1,188 @@
 'use client';
 
 import React, { useRef, useState } from 'react';
-import { motion, useInView, AnimatePresence, useScroll, useTransform } from 'framer-motion';
-import { ChevronDown, Calendar, MapPin, Building2 } from 'lucide-react';
+import { motion, useInView, AnimatePresence } from 'framer-motion';
+import { ChevronDown, MapPin, Building2, CheckCircle2, Award, Terminal } from 'lucide-react';
+import { PORTFOLIO_DATA, CareerRole } from '@/data/portfolioData';
 
-const experiences = [
-    {
-        id: 1,
-        title: 'Senior Cloud & DevSecOps Engineer',
-        company: 'Ideassion Technology Solutions',
-        location: 'Chennai, Tamil Nadu, India (Hybrid)',
-        period: 'April 2026 - Present',
-        description: 'Leading cloud infrastructure security, CI/CD automation, and production operations.',
-        highlights: [
-            'Architecting secure, scalable cloud environments across AWS, GCP, and Azure',
-            'Implementing monitoring and incident management protocols',
-            'Ensuring audit readiness for SOC 2 and ISO/IEC 27001 compliance',
-            'Managing containerized workloads with Docker and Kubernetes'
-        ],
-        technologies: ['AWS', 'GCP', 'Azure', 'Docker', 'Kubernetes', 'CI/CD'],
-    },
-    {
-        id: 2,
-        title: 'Digital Transformation Specialist',
-        company: 'Ideassion Technology Solutions',
-        location: 'Chennai, Tamil Nadu, India (Hybrid)',
-        period: 'Aug 2025 - April 2026',
-        description: 'Drove R&D and cross-functional collaborations while architecting cloud and DevOps solutions.',
-        highlights: [
-            'Spearheaded Research and Development (R&D) initiatives',
-            'Drove leadership development and cross-functional collaborations',
-            'Architected multi-cloud solutions on AWS, Azure, GCP, and DigitalOcean',
-            'Specialized in DevOps practices and modern web technologies'
-        ],
-        technologies: ['AWS', 'Azure', 'GCP', 'DigitalOcean', 'DevOps', 'React.js'],
-    },
-    {
-        id: 3,
-        title: 'Senior Digital Transformation Engineer',
-        company: 'Ideassion Technology Solutions',
-        location: 'Chennai, Tamil Nadu, India (Hybrid)',
-        period: 'Aug 2024 - Aug 2025',
-        description: 'Led cloud infrastructure management and advanced front-end engineering for enterprise solutions.',
-        highlights: [
-            'Managed complex cloud environments across AWS, Azure, and GCP',
-            'Optimized DevOps workflows for improved deployment efficiency',
-            'Developed scalable applications using React.js and JavaScript',
-            'Mentored junior engineers and led technical decision making'
-        ],
-        technologies: ['AWS', 'Azure', 'GCP', 'DevOps', 'React.js', 'JavaScript'],
-    },
-    {
-        id: 4,
-        title: 'Digital Transformation Engineer',
-        company: 'Ideassion Technology Solutions',
-        location: 'Chennai, Tamil Nadu, India (Hybrid)',
-        period: 'May 2021 - Aug 2024',
-        description: 'Core contributor to full-stack development and cloud migrations.',
-        highlights: [
-            'Built responsive user interfaces with React.js and CSS',
-            'Implemented backend services using Node.js',
-            'Managed cloud resources on AWS and Microsoft Azure',
-            'Collaborated on full lifecycle software development'
-        ],
-        technologies: ['React.js', 'Node.js', 'AWS', 'Azure', 'JavaScript'],
-    },
-    {
-        id: 5,
-        title: 'Digital Transformation Intern',
-        company: 'Ideassion Technology Solutions',
-        location: 'Chennai, Tamil Nadu, India (On-site)',
-        period: 'Feb 2021 - May 2021',
-        description: 'Gained hands-on experience in modern web development and front-end technologies.',
-        highlights: [
-            'Developed foundational skills in HTML, CSS, and JavaScript',
-            'Assisted in building React.js components',
-            'Participated in agile development processes',
-            'Learned industry best practices for software delivery'
-        ],
-        technologies: ['React.js', 'JavaScript', 'HTML', 'CSS'],
-    },
-];
+function RoleRow({ role, index, isInView, isLast }: { role: CareerRole; index: number; isInView: boolean; isLast: boolean }) {
+  const [isExpanded, setIsExpanded] = useState(index === 0);
 
-function ExperienceCard({
-    experience,
-    index,
-    isInView
-}: {
-    experience: typeof experiences[0];
-    index: number;
-    isInView: boolean;
-}) {
-    const [isExpanded, setIsExpanded] = useState(false);
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: -20 }}
+      animate={isInView ? { opacity: 1, x: 0 } : {}}
+      transition={{ delay: 0.3 + index * 0.12, duration: 0.55 }}
+      className="relative pl-10"
+    >
+      {/* Timeline dot */}
+      <div className="absolute left-0 top-5 w-4 h-4 rounded-full bg-background border-2 border-accent-blue flex items-center justify-center z-10">
+        <div className="w-1.5 h-1.5 rounded-full bg-accent-blue" />
+      </div>
 
-    return (
-        <motion.div
-            initial={{ opacity: 0, x: index % 2 === 0 ? -50 : 50 }}
-            animate={isInView ? { opacity: 1, x: 0 } : {}}
-            transition={{ delay: index * 0.2, duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="relative flex flex-col md:grid md:grid-cols-[1fr_auto_1fr] gap-8 items-start"
+      {/* Timeline line connecting to next */}
+      {!isLast && (
+        <div className="absolute left-[7px] top-9 bottom-0 w-[2px] bg-gradient-to-b from-accent-blue/40 to-white/5" />
+      )}
+
+      {/* Role Card */}
+      <div className="glass-card border border-white/10 hover:border-accent-blue/30 transition-all duration-300 mb-6">
+        {/* Role Header — always visible */}
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="w-full text-left px-6 py-5 flex flex-col sm:flex-row sm:items-center justify-between gap-3"
         >
-            {/* Content - alternating sides */}
-            <div className={`order-3 md:order-none ${index % 2 === 0 ? 'md:col-start-1' : 'md:col-start-3 md:order-3'}`}>
-                <motion.div
-                    layout
-                    className="glass-card p-6 md:p-8 group hover:border-accent-blue/30 transition-all duration-300"
-                >
-                    {/* Header */}
-                    <div className="flex flex-col md:flex-row md:items-start justify-between mb-4 gap-2">
-                        <div>
-                            <h3 className="text-lg md:text-xl font-bold mb-1">{experience.title}</h3>
-                            <div className="flex items-center gap-2 text-foreground-muted text-sm md:text-base">
-                                <Building2 className="w-4 h-4" />
-                                <span>{experience.company}</span>
-                            </div>
-                        </div>
-                    </div>
+          <div>
+            <span className="text-[11px] font-mono font-bold text-accent-blue uppercase tracking-widest block mb-1">
+              {role.period}
+            </span>
+            <h3 className="text-lg md:text-xl font-bold text-white leading-tight">{role.title}</h3>
+            <p className="text-xs text-foreground-muted mt-1 leading-relaxed">{role.summary}</p>
+          </div>
 
-                    {/* Meta info */}
-                    <div className="flex flex-wrap gap-3 md:gap-4 text-xs md:text-sm text-foreground-muted mb-4">
-                        <div className="flex items-center gap-1">
-                            <Calendar className="w-4 h-4" />
-                            {experience.period}
-                        </div>
-                        <div className="flex items-center gap-1">
-                            <MapPin className="w-4 h-4" />
-                            {experience.location}
-                        </div>
-                    </div>
-
-                    {/* Description */}
-                    <p className="text-foreground-muted mb-4 text-sm md:text-base">{experience.description}</p>
-
-                    {/* Expand button */}
-                    <button
-                        onClick={() => setIsExpanded(!isExpanded)}
-                        className="flex items-center gap-2 text-sm text-accent-blue hover:text-foreground transition-colors"
-                    >
-                        {isExpanded ? 'Show less' : 'Show more'}
-                        <motion.div
-                            animate={{ rotate: isExpanded ? 180 : 0 }}
-                            transition={{ duration: 0.3 }}
-                        >
-                            <ChevronDown className="w-4 h-4" />
-                        </motion.div>
-                    </button>
-
-                    {/* Expandable content */}
-                    <AnimatePresence>
-                        {isExpanded && (
-                            <motion.div
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: 'auto', opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
-                                transition={{ duration: 0.3 }}
-                                className="overflow-hidden"
-                            >
-                                <div className="pt-4 mt-4 border-t border-glass-border">
-                                    <h4 className="font-semibold mb-3 text-sm md:text-base">Key Achievements</h4>
-                                    <ul className="space-y-2">
-                                        {experience.highlights.map((highlight, i) => (
-                                            <li key={i} className="flex items-start gap-2 text-foreground-muted text-sm md:text-base">
-                                                <span className="w-1.5 h-1.5 rounded-full bg-accent-blue mt-2 shrink-0" />
-                                                {highlight}
-                                            </li>
-                                        ))}
-                                    </ul>
-
-                                    {/* Technologies */}
-                                    <div className="flex flex-wrap gap-2 mt-4">
-                                        {experience.technologies.map((tech) => (
-                                            <span
-                                                key={tech}
-                                                className="px-3 py-1 text-xs rounded-full glass"
-                                            >
-                                                {tech}
-                                            </span>
-                                        ))}
-                                    </div>
-                                </div>
-                            </motion.div>
-                        )}
-                    </AnimatePresence>
-                </motion.div>
+          <div className="flex items-center gap-2 shrink-0">
+            <span className="hidden sm:block text-xs text-foreground-muted">
+              {isExpanded ? 'Collapse' : 'Expand'}
+            </span>
+            <div className={`w-7 h-7 rounded-lg glass border border-white/10 flex items-center justify-center transition-transform duration-300 ${isExpanded ? 'rotate-180' : ''}`}>
+              <ChevronDown className="w-4 h-4 text-accent-blue" />
             </div>
+          </div>
+        </button>
 
-            {/* Timeline line and dot (Desktop only or adjusted for mobile) */}
-            {/* On mobile, we might want to hide the central line connector or adjust it. 
-                For simplicity in this refactor, I'll keep it but ensure it doesn't break layout. 
-                Actually, the central line is drawn in the parent component. 
-                Here we just position the dot. */}
-            <div className="hidden md:flex md:col-start-2 flex-col items-center">
-                <motion.div
-                    initial={{ scale: 0 }}
-                    animate={isInView ? { scale: 1 } : {}}
-                    transition={{ delay: index * 0.2 + 0.3 }}
-                    className="w-4 h-4 rounded-full bg-foreground border-4 border-background z-10"
-                />
-                <div className="w-px h-full bg-glass-border -mt-2" />
-            </div>
+        {/* Expandable Details */}
+        <AnimatePresence initial={false}>
+          {isExpanded && (
+            <motion.div
+              key="details"
+              initial={{ height: 0, opacity: 0 }}
+              animate={{ height: 'auto', opacity: 1 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+              className="overflow-hidden"
+            >
+              <div className="px-6 pb-6 pt-1 border-t border-white/5 space-y-5">
+                {/* Responsibilities */}
+                <div>
+                  <h4 className="text-[10px] font-bold uppercase tracking-wider text-accent-blue mb-3 flex items-center gap-1.5">
+                    <Terminal className="w-3.5 h-3.5" /> Core Responsibilities
+                  </h4>
+                  <ul className="space-y-2">
+                    {role.responsibilities.map((resp, i) => (
+                      <li key={i} className="flex items-start gap-2.5 text-xs text-gray-300 leading-relaxed">
+                        <span className="w-1.5 h-1.5 rounded-full bg-accent-blue mt-1.5 shrink-0" />
+                        <span>{resp}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
 
-            {/* Empty space for alternating layout */}
-            <div className={`hidden md:block ${index % 2 === 0 ? 'md:col-start-3 md:order-3' : 'md:col-start-1'}`} />
-        </motion.div>
-    );
+                {/* Achievements */}
+                {role.achievements.length > 0 && (
+                  <div>
+                    <h4 className="text-[10px] font-bold uppercase tracking-wider text-green-400 mb-3 flex items-center gap-1.5">
+                      <Award className="w-3.5 h-3.5" /> Key Achievements
+                    </h4>
+                    <ul className="space-y-2">
+                      {role.achievements.map((ach, i) => (
+                        <li key={i} className="flex items-start gap-2.5 text-xs text-gray-300 leading-relaxed">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-green-400 shrink-0 mt-0.5" />
+                          <span>{ach}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {/* Tech Badges */}
+                <div className="flex flex-wrap gap-1.5 pt-3 border-t border-white/5">
+                  {role.technologies.map((tech) => (
+                    <span key={tech} className="px-2 py-0.5 rounded bg-white/5 border border-white/5 text-[11px] font-mono text-gray-400">
+                      {tech}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </motion.div>
+  );
 }
 
 export default function Experience() {
-    const sectionRef = useRef<HTMLDivElement>(null);
-    const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
+  const sectionRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
 
-    return (
-        <section
-            id="experience"
-            ref={sectionRef}
-            className="section relative overflow-hidden"
+  const company = PORTFOLIO_DATA.careerHistory[0]; // All roles are at same company
+
+  return (
+    <section id="experience" ref={sectionRef} className="section relative overflow-hidden bg-background">
+      <div className="container-custom relative z-10">
+        {/* Section Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={isInView ? { opacity: 1, y: 0 } : {}}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-16"
         >
-            <div className="container-custom">
-                {/* Header */}
-                <motion.div
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={isInView ? { opacity: 1, y: 0 } : {}}
-                    transition={{ duration: 0.8 }}
-                    className="text-center mb-20"
-                >
-                    <span className="text-sm text-accent-blue tracking-[0.3em] uppercase mb-4 block">
-                        Career Journey
-                    </span>
-                    <h2 className="section-title mb-6">
-                        Professional <span className="gradient-text">Experience</span>
-                    </h2>
-                    <p className="section-subtitle mx-auto">
-                        A track record of delivering impactful digital transformation projects
-                        across diverse industries and technology stacks.
-                    </p>
-                </motion.div>
+          <span className="text-sm text-accent-blue tracking-[0.3em] uppercase mb-4 block">
+            Career Timeline &amp; Progression
+          </span>
+          <h2 className="section-title mb-6">
+            Professional <span className="gradient-text">Experience</span>
+          </h2>
+          <p className="section-subtitle mx-auto">
+            5+ years of continuous growth at a single company, progressing from software engineering to leading Cloud &amp; DevSecOps initiatives.
+          </p>
+        </motion.div>
 
-                {/* Timeline */}
-                <div className="relative max-w-5xl mx-auto">
-                    {/* Central Base Line */}
-                    <div className="absolute left-1/2 top-0 bottom-0 w-px bg-glass-border -translate-x-1/2 hidden md:block" />
-
-                    {/* Glowing Scroll Progress Line */}
-                    <motion.div
-                        style={{ height: useTransform(useScroll({ target: sectionRef, offset: ["start center", "end center"] }).scrollYProgress, [0, 1], ["0%", "100%"]) }}
-                        className="absolute left-1/2 top-0 w-px bg-gradient-to-b from-blue-500 via-purple-500 to-blue-500 -translate-x-1/2 shadow-[0_0_15px_rgba(59,130,246,0.6)] z-0 hidden md:block"
-                    />
-
-                    {/* Experience cards */}
-                    <div className="space-y-12 relative z-10">
-                        {experiences.map((experience, index) => (
-                            <ExperienceCard
-                                key={experience.id}
-                                experience={experience}
-                                index={index}
-                                isInView={isInView}
-                            />
-                        ))}
-                    </div>
-                </div>
+        <div className="max-w-3xl mx-auto">
+          {/* Company Block Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={isInView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.7, delay: 0.15 }}
+            className="glass-card border border-accent-blue/30 px-6 py-5 mb-8 flex flex-col sm:flex-row sm:items-center gap-4"
+          >
+            {/* Company Logo placeholder */}
+            <div className="w-12 h-12 rounded-xl bg-accent-blue/10 border border-accent-blue/30 flex items-center justify-center shrink-0">
+              <Building2 className="w-6 h-6 text-accent-blue" />
             </div>
-        </section>
-    );
+            <div className="flex-1">
+              <h3 className="text-lg font-bold text-white">{company.company}</h3>
+              <div className="flex flex-wrap items-center gap-2 mt-1 text-xs text-foreground-muted">
+                <MapPin className="w-3.5 h-3.5 text-accent-blue" />
+                <span>{company.location}</span>
+                <span className="text-white/20">•</span>
+                <span>Aug 2021 – Present</span>
+                <span className="text-white/20">•</span>
+                <span className="text-accent-blue font-semibold">4 Roles</span>
+              </div>
+            </div>
+            <div className="shrink-0">
+              <span className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-green-500/10 border border-green-500/25 text-green-400 text-xs font-bold">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
+                Currently Employed
+              </span>
+            </div>
+          </motion.div>
+
+          {/* Roles Timeline */}
+          <div className="relative">
+            {PORTFOLIO_DATA.careerHistory.map((role, idx) => (
+              <RoleRow
+                key={role.id}
+                role={role}
+                index={idx}
+                isInView={isInView}
+                isLast={idx === PORTFOLIO_DATA.careerHistory.length - 1}
+              />
+            ))}
+          </div>
+        </div>
+      </div>
+    </section>
+  );
 }

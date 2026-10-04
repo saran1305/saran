@@ -2,251 +2,256 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { MessageCircle, X, Send, User, Mail, MessageSquare, CheckCircle2 } from 'lucide-react';
-
-type Message = {
-    id: string;
-    text: string;
-    sender: 'bot' | 'user';
-    type?: 'input-name' | 'input-email' | 'input-message' | 'text';
-};
-
-const initialMessages: Message[] = [
-    {
-        id: '1',
-        text: "Hi there! 👋 I'm Saran's AI Assistant.",
-        sender: 'bot',
-        type: 'text'
-    },
-    {
-        id: '2',
-        text: "I can help you get in touch with him directly. First, what's your name?",
-        sender: 'bot',
-        type: 'input-name'
-    }
-];
-
+import { MessageSquare, X, Send, Bot, Terminal, Sparkles, CheckCircle2, ArrowRight } from 'lucide-react';
+import { PORTFOLIO_DATA } from '@/data/portfolioData';
 import { useSound } from '@/context/SoundContext';
 
+type ChatMessage = {
+  id: string;
+  text: string;
+  sender: 'bot' | 'user';
+  timestamp: string;
+};
+
+const quickActions = [
+  'Cloud Experience',
+  'DevSecOps',
+  'Glido Architecture',
+  'Projects',
+  'Production Troubleshooting',
+  'Notice & Remote',
+  'Blog',
+];
+
 export default function ChatWidget() {
-    const [isOpen, setIsOpen] = useState(false);
-    const { isSoundEnabled } = useSound();
+  const [isOpen, setIsOpen] = useState(false);
+  const { isSoundEnabled } = useSound();
 
-    const playClickSound = () => {
-        if (isSoundEnabled) {
-            const audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
-            const oscillator = audioContext.createOscillator();
-            const gainNode = audioContext.createGain();
+  const playClickSound = () => {
+    if (isSoundEnabled) {
+      try {
+        const audioContext = new (window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext)();
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        oscillator.frequency.value = 800;
+        oscillator.type = 'sine';
+        gainNode.gain.value = 0.15;
+        oscillator.start();
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
+        oscillator.stop(audioContext.currentTime + 0.1);
+      } catch (err) {
+        // ignore
+      }
+    }
+  };
 
-            oscillator.connect(gainNode);
-            gainNode.connect(audioContext.destination);
+  const [messages, setMessages] = useState<ChatMessage[]>([
+    {
+      id: '1',
+      text: "Hi, I'm Saran's portfolio assistant. What would you like to explore?",
+      sender: 'bot',
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+    },
+  ]);
+  const [inputValue, setInputValue] = useState('');
+  const messagesEndRef = useRef<HTMLDivElement>(null);
 
-            oscillator.frequency.value = 800;
-            oscillator.type = 'sine';
-            gainNode.gain.value = 0.2;
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  };
 
-            oscillator.start();
-            gainNode.gain.exponentialRampToValueAtTime(0.001, audioContext.currentTime + 0.1);
-            oscillator.stop(audioContext.currentTime + 0.1);
-        }
-    };
-    const [messages, setMessages] = useState<Message[]>(initialMessages);
-    const [inputValue, setInputValue] = useState('');
-    const [currentStep, setCurrentStep] = useState<'name' | 'email' | 'message' | 'complete'>('name');
-    const [userData, setUserData] = useState({ name: '', email: '', message: '' });
-    const messagesEndRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    if (isOpen) {
+      scrollToBottom();
+    }
+  }, [messages, isOpen]);
 
-    const scrollToBottom = () => {
-        messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-    };
+  // Local knowledge query engine
+  const queryKnowledgeBase = (query: string): string => {
+    const q = query.toLowerCase();
 
-    useEffect(() => {
-        scrollToBottom();
-    }, [messages, isOpen]);
+    if (q.includes('glido') || q.includes('gcp') || q.includes('google cloud')) {
+      return `Glido is Saran's flagship GCP Cloud Infrastructure project. He architected a serverless setup on Cloud Run, Cloud SQL (PostgreSQL), Google Cloud Build CI/CD, Secret Manager runtime injection, and Cloud Storage. It features VPC Service Controls, SOC 2 / ISO 27001 readiness, and auto-scaling.`;
+    }
 
-    const handleSend = () => {
-        if (!inputValue.trim()) return;
+    if (q.includes('devsecops') || q.includes('security') || q.includes('compliance') || q.includes('soc 2') || q.includes('iso')) {
+      return `Saran embeds security controls across all 8 SDLC phases: pre-commit secret scanning, SonarQube SAST, Trivy container CVE scanning, Checkov IaC linting, signed Artifact Registry containers, GCP/AWS Secret Manager injection, least-privilege IAM, and audit logging for SOC 2 / ISO 27001 readiness.`;
+    }
 
-        // Add user message
-        const userMsg: Message = {
-            id: Date.now().toString(),
-            text: inputValue,
-            sender: 'user',
-            type: 'text'
-        };
-        setMessages(prev => [...prev, userMsg]);
-        setInputValue('');
+    if (q.includes('troubleshoot') || q.includes('incident') || q.includes('failure') || q.includes('lesson') || q.includes('disk i/o')) {
+      return `Saran's production troubleshooting methodology follows 8 steps: 1) Application -> 2) Load -> 3) CPU/Memory -> 4) Disk I/O -> 5) Network -> 6) Database -> 7) Logs -> 8) Deployment history. For example, he resolved a CI/CD build runner disk I/O freeze by implementing concurrency locks and layer caching.`;
+    }
 
-        // Process step
-        setTimeout(() => {
-            let botResponse: Message | null = null;
+    if (q.includes('project') || q.includes('work') || q.includes('srd') || q.includes('assure') || q.includes('ackumen')) {
+      return `Saran has built 4 key featured production case studies: 1) Glido (Production GCP Cloud Run & Cloud SQL), 2) SRD (AWS Cloud & Jenkins CI/CD), 3) Assure Bharath (Docker Containerization & GitHub Actions), and 4) Ackumen (Enterprise React & Redux Dashboard).`;
+    }
 
-            if (currentStep === 'name') {
-                setUserData(prev => ({ ...prev, name: userMsg.text }));
-                botResponse = {
-                    id: Date.now().toString() + 'bot',
-                    text: `Nice to meet you, ${userMsg.text}! What's your email address?`,
-                    sender: 'bot',
-                    type: 'input-email'
-                };
-                setCurrentStep('email');
-            } else if (currentStep === 'email') {
-                setUserData(prev => ({ ...prev, email: userMsg.text }));
-                botResponse = {
-                    id: Date.now().toString() + 'bot',
-                    text: "Got it. What message would you like to send to Saran?",
-                    sender: 'bot',
-                    type: 'input-message'
-                };
-                setCurrentStep('message');
-            } else if (currentStep === 'message') {
-                setUserData(prev => ({ ...prev, message: userMsg.text }));
-                botResponse = {
-                    id: Date.now().toString() + 'bot',
-                    text: "Perfect! I'm preparing your email now...",
-                    sender: 'bot',
-                    type: 'text'
-                };
-                setCurrentStep('complete');
+    if (q.includes('cloud') || q.includes('aws') || q.includes('azure') || q.includes('platform')) {
+      return `Saran has 5+ years experience as a Senior Cloud & DevSecOps Engineer across AWS, GCP, and Azure. He specializes in Terraform IaC, Docker, Kubernetes, Jenkins, GitHub Actions, Cloud Build, Splunk, CloudWatch, and Cloud Monitoring.`;
+    }
 
-                // Simulate sending and open mailto
-                setTimeout(() => {
-                    const subject = encodeURIComponent(`Portfolio Contact from ${userData.name}`);
-                    const body = encodeURIComponent(`Name: ${userData.name}\nEmail: ${userData.email}\n\nMessage:\n${userMsg.text}`);
-                    window.location.href = `mailto:shreecharan1305@gmail.com?subject=${subject}&body=${body}`;
+    if (q.includes('notice') || q.includes('interview') || q.includes('remote') || q.includes('hire') || q.includes('contact')) {
+      return `Saran's notice period is fully negotiable, and he is open to remote interviews and opportunities! You can contact him directly at shreecharan1305@gmail.com or via LinkedIn at linkedin.com/in/saran1305.`;
+    }
 
-                    setMessages(prev => [...prev, {
-                        id: Date.now().toString() + 'final',
-                        text: "I've opened your email client to send the message. Thanks for reaching out!",
-                        sender: 'bot',
-                        type: 'text'
-                    }]);
-                }, 1500);
-            }
+    if (q.includes('blog') || q.includes('journal') || q.includes('article') || q.includes('writing')) {
+      return `Saran writes technical articles in his Engineering Journal covering topics like "How I Built a Production CI/CD Pipeline on GCP Cloud Run", "DevSecOps Controls for CI/CD Pipelines", and "Preparing Infrastructure for SOC 2 & ISO 27001 Audit Readiness".`;
+    }
 
-            if (botResponse) {
-                setMessages(prev => [...prev, botResponse!]);
-            }
-        }, 600);
+    return `Saran M is a Senior Cloud & DevSecOps Engineer with 5+ years of experience across AWS, GCP, Azure, Terraform, Docker, Kubernetes, CI/CD pipelines, and security compliance. Feel free to ask about his Glido GCP architecture, SRD AWS deployment, DevSecOps lifecycle, or production troubleshooting experience!`;
+  };
+
+  const handleSend = (textToSend?: string) => {
+    const text = textToSend || inputValue;
+    if (!text.trim()) return;
+
+    playClickSound();
+
+    const userMsg: ChatMessage = {
+      id: Date.now().toString(),
+      text,
+      sender: 'user',
+      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
     };
 
-    const handleKeyPress = (e: React.KeyboardEvent) => {
-        if (e.key === 'Enter') handleSend();
-    };
+    setMessages((prev) => [...prev, userMsg]);
+    if (!textToSend) setInputValue('');
 
-    return (
-        <>
-            {/* Widget Button */}
-            <motion.button
-                initial={{ scale: 0 }}
-                animate={{ scale: 1 }}
-                whileHover={{ scale: 1.1 }}
-                whileTap={{ scale: 0.9 }}
-                onClick={() => {
-                    setIsOpen(!isOpen);
-                    playClickSound();
-                }}
-                className={`fixed bottom-8 right-8 z-[9990] w-14 h-14 rounded-full flex items-center justify-center shadow-lg shadow-blue-500/20 transition-colors ${isOpen ? 'bg-red-500 hover:bg-red-600' : 'bg-blue-600 hover:bg-blue-700'
+    // Simulate bot thinking response
+    setTimeout(() => {
+      const botResponseText = queryKnowledgeBase(text);
+      const botMsg: ChatMessage = {
+        id: (Date.now() + 1).toString(),
+        text: botResponseText,
+        sender: 'bot',
+        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+      };
+      setMessages((prev) => [...prev, botMsg]);
+    }, 400);
+  };
+
+  return (
+    <>
+      {/* Floating Trigger Button */}
+      <motion.button
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        whileHover={{ scale: 1.05 }}
+        whileTap={{ scale: 0.95 }}
+        onClick={() => {
+          playClickSound();
+          setIsOpen(!isOpen);
+        }}
+        className={`fixed bottom-6 right-6 z-[9990] px-4 py-3 rounded-full flex items-center gap-2.5 shadow-2xl transition-all border ${
+          isOpen
+            ? 'bg-red-600 hover:bg-red-700 text-white border-red-500'
+            : 'bg-accent-blue hover:bg-blue-600 text-white border-blue-400 shadow-blue-500/25'
+        }`}
+      >
+        {isOpen ? (
+          <>
+            <X className="w-5 h-5" />
+            <span className="text-xs font-bold">Close Assistant</span>
+          </>
+        ) : (
+          <>
+            <MessageSquare className="w-5 h-5" />
+            <span className="text-xs font-bold">Ask Saran</span>
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+          </>
+        )}
+      </motion.button>
+
+      {/* Chat Assistant Panel */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: 20, scale: 0.95 }}
+            animate={{ opacity: 1, y: 0, scale: 1 }}
+            exit={{ opacity: 0, y: 20, scale: 0.95 }}
+            transition={{ duration: 0.3 }}
+            className="fixed bottom-22 right-6 z-[9990] w-[90vw] max-w-[400px] h-[520px] bg-[#0c0d12] border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col"
+          >
+            {/* Window Header */}
+            <div className="p-4 bg-white/5 border-b border-white/10 flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-accent-blue/20 border border-accent-blue/40 flex items-center justify-center text-accent-blue">
+                  <Bot className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="font-bold text-white text-sm">Ask Saran — Portfolio Bot</h3>
+                  <p className="text-[10px] text-emerald-400 font-mono flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    Portfolio Knowledge Base Online
+                  </p>
+                </div>
+              </div>
+              <button
+                onClick={() => setIsOpen(false)}
+                className="p-1.5 rounded-lg text-foreground-muted hover:text-white hover:bg-white/10 transition-colors"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            {/* Messages Area */}
+            <div className="flex-1 p-4 overflow-y-auto space-y-4 text-xs scrollbar-hide">
+              {messages.map((msg) => (
+                <div
+                  key={msg.id}
+                  className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
+                >
+                  <div
+                    className={`max-w-[85%] p-3.5 rounded-2xl leading-relaxed ${
+                      msg.sender === 'user'
+                        ? 'bg-accent-blue text-white rounded-br-xs font-medium'
+                        : 'bg-white/10 text-gray-200 border border-white/5 rounded-bl-xs'
                     }`}
-            >
-                <AnimatePresence mode="wait">
-                    {isOpen ? (
-                        <motion.div
-                            key="close"
-                            initial={{ rotate: -90, opacity: 0 }}
-                            animate={{ rotate: 0, opacity: 1 }}
-                            exit={{ rotate: 90, opacity: 0 }}
-                        >
-                            <X className="text-white w-6 h-6" />
-                        </motion.div>
-                    ) : (
-                        <motion.div
-                            key="chat"
-                            initial={{ rotate: 90, opacity: 0 }}
-                            animate={{ rotate: 0, opacity: 1 }}
-                            exit={{ rotate: -90, opacity: 0 }}
-                        >
-                            <MessageCircle className="text-white w-6 h-6" />
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-            </motion.button>
+                  >
+                    {msg.text}
+                  </div>
+                  <span className="text-[9px] text-foreground-muted mt-1 px-1">{msg.timestamp}</span>
+                </div>
+              ))}
+              <div ref={messagesEndRef} />
+            </div>
 
-            {/* Chat Window */}
-            <AnimatePresence>
-                {isOpen && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 20, scale: 0.95 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 20, scale: 0.95 }}
-                        className="fixed bottom-24 right-8 z-[9990] w-[350px] md:w-[400px] bg-[#0a0a0a] border border-white/10 rounded-2xl shadow-2xl overflow-hidden flex flex-col max-h-[600px]"
-                    >
-                        {/* Header */}
-                        <div className="p-4 bg-white/5 border-b border-white/10 flex items-center gap-3">
-                            <div className="w-10 h-10 rounded-full bg-blue-600/20 flex items-center justify-center border border-blue-600/50">
-                                <span className="text-xl">🤖</span>
-                            </div>
-                            <div>
-                                <h3 className="font-bold text-white">Saran's Assistant</h3>
-                                <p className="text-xs text-green-400 flex items-center gap-1">
-                                    <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-                                    Online
-                                </p>
-                            </div>
-                        </div>
+            {/* Quick Action Pills */}
+            <div className="px-3 py-2 border-t border-white/5 bg-black/40 overflow-x-auto scrollbar-hide flex gap-1.5">
+              {quickActions.map((action) => (
+                <button
+                  key={action}
+                  onClick={() => handleSend(action)}
+                  className="px-2.5 py-1 rounded-full bg-white/5 hover:bg-accent-blue hover:text-white border border-white/10 text-[10px] font-semibold text-gray-300 whitespace-nowrap transition-colors"
+                >
+                  {action}
+                </button>
+              ))}
+            </div>
 
-                        {/* Messages Area */}
-                        <div className="flex-1 p-4 overflow-y-auto space-y-4 min-h-[300px] max-h-[400px] scrollbar-hide">
-                            {messages.map((msg) => (
-                                <motion.div
-                                    key={msg.id}
-                                    initial={{ opacity: 0, y: 10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    className={`flex ${msg.sender === 'user' ? 'justify-end' : 'justify-start'}`}
-                                >
-                                    <div
-                                        className={`max-w-[80%] p-3 rounded-2xl text-sm ${msg.sender === 'user'
-                                            ? 'bg-blue-600 text-white rounded-br-none'
-                                            : 'bg-white/10 text-gray-200 rounded-bl-none'
-                                            }`}
-                                    >
-                                        {msg.text}
-                                    </div>
-                                </motion.div>
-                            ))}
-                            <div ref={messagesEndRef} />
-                        </div>
-
-                        {/* Input Area */}
-                        {currentStep !== 'complete' && (
-                            <div className="p-3 border-t border-white/10 bg-white/5">
-                                <div className="flex gap-2">
-                                    <input
-                                        type="text"
-                                        value={inputValue}
-                                        onChange={(e) => setInputValue(e.target.value)}
-                                        onKeyDown={handleKeyPress}
-                                        placeholder={
-                                            currentStep === 'name' ? "Enter your name..." :
-                                                currentStep === 'email' ? "Enter your email..." :
-                                                    "Type your message..."
-                                        }
-                                        className="flex-1 bg-black/50 border border-white/10 rounded-xl px-4 py-2 text-sm text-white focus:outline-none focus:border-blue-500/50 transition-colors"
-                                        autoFocus
-                                    />
-                                    <button
-                                        onClick={handleSend}
-                                        disabled={!inputValue.trim()}
-                                        className="p-2 rounded-xl bg-blue-600 text-white disabled:opacity-50 disabled:cursor-not-allowed hover:bg-blue-700 transition-colors"
-                                    >
-                                        <Send className="w-4 h-4" />
-                                    </button>
-                                </div>
-                            </div>
-                        )}
-                    </motion.div>
-                )}
-            </AnimatePresence>
-        </>
-    );
+            {/* Input Bar */}
+            <div className="p-3 border-t border-white/10 bg-white/5 flex items-center gap-2">
+              <input
+                type="text"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                onKeyDown={(e) => e.key === 'Enter' && handleSend()}
+                placeholder="Ask about Saran's experience, GCP, Glido..."
+                className="flex-1 bg-black/50 border border-white/10 rounded-xl px-3.5 py-2 text-xs text-white placeholder:text-foreground-muted focus:outline-none focus:border-accent-blue transition-colors"
+              />
+              <button
+                onClick={() => handleSend()}
+                disabled={!inputValue.trim()}
+                className="p-2 rounded-xl bg-accent-blue text-white disabled:opacity-40 disabled:cursor-not-allowed hover:bg-blue-600 transition-colors"
+              >
+                <Send className="w-4 h-4" />
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
+  );
 }
